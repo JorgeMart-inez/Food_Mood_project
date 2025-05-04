@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <title>Select Pago por ID</title>
+</head>
+<body>
+    <header>
+        <!-- Navigation-->
+        <nav class="form-nav">
+            <ul class="form-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-cotizar">
+            <h2>Seleccionar un pago por ID</h2>
+            <form action="../php/select.php" method="post">
+
+                <div class="form-group">
+                    <label for="id_pago">ID del pago</label>
+                    <input type="number" id="id_pago" name="id_pago" placeholder="ID del pago cotizado" required>
+                </div>
+
+                <input class="formBtn" type="submit" name="pago" value="Enviar">
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+
+{
+    "_comment": ["Este archivo es solo de ejemplo, como muestra de uno de los archivos que contiene la estructura de una libreria en PHP"],
+    "name": "usuario/mi_libreria",
+    "description": "Una librería PHP de ejemplo",
+    "autoload": {
+        "psr-4": {
+            "mi_libreria\\": "clases/"
+        }
+    }
+}

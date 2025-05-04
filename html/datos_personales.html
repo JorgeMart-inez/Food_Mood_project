@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Personales</title>
+    <script src="../js/scripts.js" defer></script>
+    <link rel="stylesheet" href="../css/estilos.css">
+    
+</head>
+<body>
+
+    <header>
+         <!-- Navigation-->
+         <nav class="login-nav">
+            <ul class="login-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="datos-personales" id="datos-personales">
+            <div class="datos">
+                <h4>Por políticas de la empresa, necesitamos que ingrese sus datos, este proceso solo toma 1 minuto</h4>
+                <button class="datosBtn" id="aceptar">Ok</button>
+            </div>
+        </section>
+        
+        <form class="form-container-datos" action="../php/insert.php" method="POST">
+            <section id="formulario-cliente">
+                <h2>Datos del cliente</h2>
+
+                <label for="nombre">Nombre:</label>
+                <input class="input-datos" type="text" name="nombre" id="nombre" placeholder="Escriba su nombre" required><br>
+
+                <label for="apellido">Apellido:</label>
+                <input class="input-datos" type="text" name="apellido" id="apellido" placeholder="Escriba su apellido" required><br>
+
+                <label for="telefono">Teléfono:</label>
+                <input class="input-datos" type="tel" name="telefono" id="telefono" placeholder="Escriba su teléfono" maxlength="10" minlength="10" required><br>
+
+                <label for="estado">Estado en el que radica:</label>
+                <select class="input-datos" name="estado" id="estado" required>
+                    <option value="" disabled selected>Seleccione su estado</option>
+                    <option value="Aguascalientes">Aguascalientes</option>
+                    <option value="Baja California">Baja California</option>
+                    <option value="Baja California Sur">Baja California Sur</option>
+                    <option value="Campeche">Campeche</option>
+                    <option value="Chiapas">Chiapas</option>
+                    <option value="Chihuahua">Chihuahua</option>
+                    <option value="Coahuila">Coahuila</option>
+                    <option value="Colima">Colima</option>
+                    <option value="Ciudad de México">Ciudad de México</option>
+                    <option value="Durango">Durango</option>
+                    <option value="Estado de México">Estado de México</option>
+                    <option value="Guanajuato">Guanajuato</option>
+                    <option value="Guerrero">Guerrero</option>
+                    <option value="Hidalgo">Hidalgo</option>
+                    <option value="Jalisco">Jalisco</option>
+                    <option value="Michoacán">Michoacán</option>
+                    <option value="Morelos">Morelos</option>
+                    <option value="Nayarit">Nayarit</option>
+                    <option value="Nuevo León">Nuevo León</option>
+                    <option value="Oaxaca">Oaxaca</option>
+                    <option value="Puebla">Puebla</option>
+                    <option value="Querétaro">Querétaro</option>
+                    <option value="Quintana Roo">Quintana Roo</option>
+                    <option value="San Luis Potosí">San Luis Potosí</option>
+                    <option value="Sinaloa">Sinaloa</option>
+                    <option value="Sonora">Sonora</option>
+                    <option value="Tabasco">Tabasco</option>
+                    <option value="Tamaulipas">Tamaulipas</option>
+                    <option value="Tlaxcala">Tlaxcala</option>
+                    <option value="Veracruz">Veracruz</option>
+                    <option value="Yucatán">Yucatán</option>
+                    <option value="Zacatecas">Zacatecas</option>
+                </select><br>
+
+                <label for="ciudad">Ciudad:</label>
+                <input class="input-datos" type="text" name="ciudad" id="ciudad" placeholder="Escriba su ciudad" required><br>
+                        
+            </section>
+
+            <div class="botones">
+                <input type="submit" name="cliente" value="Enviar">
+                <input type="reset"  value="Limpiar"> 
+            </div>
+        </form>
+    </main>
+
+    <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+
+</body>
+</html>

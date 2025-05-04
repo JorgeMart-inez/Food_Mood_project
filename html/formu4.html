@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css"/>
+    <script src="../js/hilos.js" defer></script>
+    <title>Formulario de Evento</title>
+</head>
+<body>
+    <header>
+        <!-- Navigation-->
+        <nav class="form-nav">
+            <ul class="form-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-paquete-4">
+            <h2>Formulario paquete 4</h2><br>
+            <p class="mensaje-paquete4">Este paquete es libre, usted decide la cantidad de invitados así como los servicios que requiera.</p>
+            <form action="../php/insert.php" method="post">
+                <div class="form-group">
+                    <label for="anfitrion">A nombre de:</label>
+                    <input type="text" id="anfitrion" name="anfitrion" placeholder="Nombre del anfitrión del evento" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="fecha">Fecha del evento:</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="lugar">Lugar del Evento:</label>
+                    <input type="text" id="lugar" name="lugar" placeholder="Ej: Av. México #234, Tamulte, Villahermosa, Tabasco" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="lugar">Hora del Evento:</label>
+                    <input type="time" id="hora" name="hora" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="duracion">Duración del Evento (en horas):</label>
+                    <input type="number" id="duracion" name="duracion" min="1" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="invitados">Cantidad de invitados:</label>
+                    <input type="number" id="invitados" name="invitados" required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="tipo_evento">Tipo de Evento:</label>
+                    <input type="text" id="tipo_evento" name="tipo_evento" placeholder="Ej: Ejecutivo, XV años, Boda, etc." required>
+                </div>
+    
+                <div class="form-group">
+                    <label for="servicios">Elija los servicios de su preferencia:</label>
+                    <label class="label-checkbox-paquete4">
+                        Cristalería<input type="checkbox" name="servicios[]" value="1">
+                        Mantelería<input type="checkbox" name="servicios[]" value="2">
+                        Meseros<input type="checkbox" name="servicios[]" value="3">
+                        Musica en vivo<input type="checkbox" name="servicios[]" value="4">
+                        Decoracion de evento<input type="checkbox" name="servicios[]" value="5">
+                    </label>
+                </div>
+    
+                <div class="form-group">
+                    <label for="aperitivo">Aperitivo:</label>
+                    <select id="aperitivo" name="aperitivo" required>
+                        <option value="1">Tabla de Quesos.</option>
+                        <option value="2">Falafel con salsa de tahini.</option>
+                        <option value="3">Pinchos de verduras con hummus.</option>
+                        <option value="4">Mini quiches de verduras.</option>
+                        <option value="5">Brochetas de Tomate y Mozzarella.</option>
+                        <option value="6">Mini tostadas de aguacate y huevo poché.</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="entrada">Entrada:</label>
+                    <select id="entrada" name="entrada" required>
+                        <option value="1">Mini hamburguesas de ternera</option>
+                        <option value="2">Pinchos de filete de ternera con salsa de reducción de vino.</option>
+                        <option value="3">Croquetas de pescado con salsa tártara.</option>
+                        <option value="4">Mini tartaletas de langostinos con salsa de mantequilla.</option>
+                        <option value="5">Crema de langostino con crutones de Baguette</option>
+                        <option value="6">Crema de champiñones con crutones</option> 
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="plato-fuerte">Plato Fuerte:</label>
+                    <select id="plato_fuerte" name="plato_fuerte" required>
+                        <option value="1">Albóndigas de ternera en salsa de tomate con pasta.</option>
+                        <option value="2">Paella de mariscos con arroz y verduras.</option>
+                        <option value="3">Lasaña de verduras con queso y salsa de tomate.</option>
+                        <option value="4">Filete de ternera a la pimienta con puré de papas.</option>
+                        <option value="5">Salmón a la parrilla con ensalada de aguacate y mango.</option>
+                        <option value="6">Pollo al horno con trufa y puré de papas.</option>
+                        <option value="7">Salmón ahumado con ensalada de aguacate y caviar.</option>
+                        <option value="8">Camarones al ajillo con arroz y ensalada de lechuga.</option> 
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="postre">Postre:</label>
+                    <select id="postre" name="postre" required>
+                        <option value="1">Pastel Integral de Zanahoria.</option>
+                        <option value="2">Brownies de chocolate y vainilla adicionados con nueces de castilla.</option>
+                        <option value="3">Mousse de Mango.</option>
+                        <option value="4">Mousse de Fresa.</option>
+                        <option value="5">Chessecake de frutos rojos.</option>
+                        <option value="6">Queso Napolitano.</option> 
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="bebida">Bebida:</label>
+                    <select id="bebida" name="bebida" required>
+                        <option value="1">Limonada de fresa.</option>
+                        <option value="2">Agua de horchata con pétalos de rosa.</option>
+                        <option value="3">Agua mineral con gas.</option>
+                        <option value="4">Té helado de frutas.</option>
+                        <option value="5">Jugo de naranja fresco.</option>
+                        <option value="6">Limonada de arandano.</option>
+                        <option value="7">Agua de maracuya</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="metodo_pago">Método de Pago:</label>
+                    <select id="metodo_pago" name="metodo_pago" required>
+                        <option value="1">Transferencia</option>
+                        <option value="2">Efectivo</option>
+                        <option value="3">Débito</option>
+                        <option value="4">Crédito</option>
+                    </select>
+                </div>
+                <input class="formBtn" type="submit" name="cotizar-p4" value="Enviar">
+            </form>
+        </div>
+
+        <div class="sugerencia" id="sugerencia">
+            <h2>Sugerencias:</h2>
+            <hr/>
+            <p id="sugerencia_aperitivo"></p>
+            <p id="sugerencia_entrada"></p>
+            <p id="sugerencia_plato_fuerte"></p>
+        </div>
+    </main>
+
+    <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+</body>
+</html>

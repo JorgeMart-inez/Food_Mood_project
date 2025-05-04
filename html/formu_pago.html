@@ -1,0 +1,63 @@
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <title>Formulario Pago</title>
+</head>
+<body>
+    <header>
+        <!-- Navigation-->
+        <nav class="form-nav">
+            <ul class="form-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-pago">
+            <h2>Formulario Pago</h2>
+            <form action="../php/insert.php" method="post">
+
+                <div class="form-group">
+                    <label for="id_paquete">ID del Paquete</label>
+                    <input type="number" id="id_paquete" name="id_paquete" placeholder="ID del paquete" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_cotizacion">ID del cotizacion</label>
+                    <input type="number" id="id_cotizacion" name="id_cotizacion" placeholder="ID del cotizacion" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_usuario">ID del usuario</label>
+                    <input type="number" id="id_usuario" name="id_usuario" placeholder="ID del usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha_pago">Fecha de pago</label>
+                    <input type="date" id="fecha_pago" name="fecha_pago" placeholder="ID del usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado_pago">Estado de pago:</label>
+                    <select id="estado_pago" name="estado_pago" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Pagado">Pagado</option>
+                        <option value="Cancelado">Cancelado</option>
+                    </select>
+                </div>
+
+
+                <input class="formBtn" type="submit" name="pago" value="Enviar">
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,74 @@
+--Ideas para agregar al sistema--
+-Hacer que el usuario que compra los paquetes, aparezca en el formato de pago, y en el formato de cotizacion,
+ de manera que reciba la información personal de la cuenta loggeada.
+-Verificar que el usuario haya iniciado sesión en la app antes de poder cotizar un paquete.
+-Quitar la referencia del formato cotizar, en su lugar crear una nueva funcíon que sea formato pago.
+-Agregar funcion que restrinja la fecha de el evento a 5 dias despues de la cotizacion.
+-Agregar lista de estados en mexico para el formulario de cliente
+
+--Actividad de Topicos Av. de programación--
+Aplicar hilos mediante python para crear el formato PDF de pago
+
+--Objetivos de la actividad 2.4 de BD--
+1.- Diseñar el diagrama de proceso (flujo) de la app --->(check)
+1.1.-Maquetar las reglas de negocios --->(check)
+2.- Diseñar el diagrama E-R --->(check)
+3.- Diseñar el esquema relacional --->(check)
+4.- Crear el Diccionario de datos
+5.- Implementar la BD con el SGBD PostgreSQL -->(check)
+6.- Poblar la BD con datos de cada entidad 
+7.- Desarrollo de la app demo con consultas select e insert
+
+--Requerimientos de la actividad 2.4 de BD-- 
+• Integrar toda la documentación necesaria de acuerdo a los objetivos y 
+resultados esperados de la actividad. 
+•Se debe incluir código de conexión a la base de datos y operaciones 
+INSERT y SELECT en etapa Demo de la aplicación; integrando capturas 
+de pantalla de los resultados. 
+•Avance del Proyecto: Portada, Introducción, Anteproyecto, Análisis de 
+Requerimientos, Diseño de la base de datos, Creación de la base de 
+datos, Aplicación Demo, Conclusiones, y Referencias. 
+
+--Ideas para la app demo--
+Crear un espacio en la app principal F&M (en el navbar)para la creacion directa del crud, es decir, poder
+ingresar un cliente, asi como conectar los formularios a la BD de manera que se guarden los registros junto
+a la cuenta que hizo el registro.
+
+
+--ENTIDADES DEL PROJECTO FOOD & MOOD--
+usuario(id_usuario, correo, contrasenia)
+cliente(id_cliente, nombre, apellido, telefono, estado, direccion)
+paquete(id_paquete, nombre_paquete, anfitrion, fecha_evento, lugar_evento, hora_evento, duracion_evento,
+        cantidad_invitados, tipo_evento, servicios, aperitivo, entrada, plato_fuerte, postre(opcional),
+        bebida, metodo_pago)
+cotizacion(id_cotizacion, id_paquete, total)
+pago(id_pago, id_paquete, id_cotizacion, id_usuario, referencia_pago, total_pago, metodo_pago, estado_pago, fecha_pago, usuario)
+
+--Reglas de negocio
+-un cliente pertenece a un usuario
+-un usuario pertenece a un cliente
+-un cliente puede cotizar muchos paquetes
+-muchos paquetes pueden ser cotiados por un cliente
+-un paquete tiene muchas cotizaciones
+-muchas cotizaciones tiene un paquete
+-una cotizacion tiene muchos pagos
+-un pago tiene una cotizacion
+
+
+--Concepto del diagrama de flujo--
+El diagrama de flujo que vamos a manejar será para que el usuario cotize un paquete:
+INICIO
+|
+cliente esta logeado? ->no:: entonces logeeate
+|
+si::
+|
+el cliente elige un paquete
+|
+el cliente rellena el formulario de paquete
+|
+si el cliente cotiza? ->no:: regresa a elegir paquete
+|
+genera el formato de pago
+|
+FIN

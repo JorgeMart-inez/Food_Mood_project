@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <script src="/js/scripts.js" defer></script>
+    <title>Sing Up</title>
+</head>
+<body>
+
+    <header>
+        <!-- Navigation-->
+        <nav class="signup-nav">
+            <ul class="signup-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="signup_container">
+        <h2 class="tittle_form">CREA TU CUENTA</h2>
+        <form action="../php/singup.php" method="post" id="singup-form">
+            <label for="correo">Ingresa tu correo:</label>
+            <input type="email" name="correo" id="correo" required><br> 
+            <label for="contraseña">Ingresa tu contraseña:</label>
+            <input type="password" name="contrasenia1" id="contrasenia1" minlength="8" maxlength="8" required><br>
+            <label for="contraseña">Repite tu contraseña:</label>
+            <input type="password" name="contrasenia2" id="contrasenia2" minlength="8" maxlength="8" required><br>
+            <input type="submit" class="submit-signup" name="singup" value="Crear cuenta">
+            <p align="center"><a href="login.html">¿Ya tienes una cuenta? Inicia sesión.</a></p>
+        </form>
+    </div>
+
+    <!-- Footer-->
+    <footer class="footer-login">
+        <br><br>
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+</body>
+</html>

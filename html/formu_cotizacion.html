@@ -1,0 +1,38 @@
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <title>Formulario Cotizar</title>
+</head>
+<body>
+    <header>
+        <!-- Navigation-->
+        <nav class="form-nav">
+            <ul class="form-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-cotizar">
+            <h2>Formulario paquete 1</h2>
+            <form action="../php/insert.php" method="post">
+
+                <div class="form-group">
+                    <label for="id_paquete">ID del Paquete</label>
+                    <input type="number" id="id_paquete" name="id_paquete" placeholder="ID del paquete cotizado" required>
+                </div>
+
+                <input class="formBtn" type="submit" name="cotizacion" value="Enviar">
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+</body>
+</html>

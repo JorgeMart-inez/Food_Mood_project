@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/estilos.css">
+    <title>Login</title>
+</head>
+<body>
+
+    <header>
+        <!-- Navigation-->
+        <nav class="login-nav">
+            <ul class="login-nav-links">
+                <li><a href="../index.html">FOOD & MOOD</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Body -->
+    <main>
+        <section class="seccion-login">
+            <h2 align="center">Iniciar Sesión</h2>
+    
+            <form action="../php/login.php" method="POST" id="login">
+                <label for="correo">Correo:</label><br>
+                <input type="email" name="correo" id="correo" required><br>
+                <label for="contraseña">Contraseña:</label><br>
+                <input type="password" name="contrasenia" id="contrasenia" minlength="8" maxlength="8" required><br>
+                <input type="submit" class="submit-login" name="login" value="Ingresar">
+                <p align="center"><a href="#">¿No recuerdas tu contraseña?</a></p>
+                <p align="center"><a href="singup.html">¿No tienes cuenta? Crea una.</a></p>
+                
+            </form>
+        </section>       
+    </main>
+
+     <!-- Footer-->
+     <footer class="footer-login">
+        <div class="small text-center text-muted">Copyright &copy; 2025 - FOOD & MOOD</div>
+    </footer>
+
+    
+</body>
+</html>
