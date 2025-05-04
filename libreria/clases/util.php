@@ -6,11 +6,11 @@ class util{
 
     public static function calc_costo_servicios($pServicios){
         $precio_servicio = [
-            "cristaleria" => 1000,
-            "manteleria"  => 500,
-            "meseros"     => 2500, 
-            "musica"      => 4000,
-            "decoracion"  => 2500,
+            "1"  => 1000,
+            "2"  => 500,
+            "3"  => 2500, 
+            "4"  => 4000,
+            "5"  => 2500,
         ];
     
         $costo_total = 0;

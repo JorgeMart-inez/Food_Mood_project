@@ -101,13 +101,12 @@ class mi_libreria{
               return $fechas;
        }
     /* Formato para paquete 1 y 2 */
-    public function formato_cotizar($pPaquete,$pNombre, $pEvento, $pLugar, $pFecha, $pHora,
-                            $pDuracion, $pInvitados, $pServicios_str, $pAperitivo, 
-                            $pEntrada, $pPlato, $pBebida, $pMetodo, $pServicios)
+    public function formato_cotizar($pPaquete,$pAnfitrion, $pEvento, $pLugar, $pFecha, $pHora, $pDuracion, 
+              $pInvitados, $pServicios_str, $pAperitivo, $pEntrada, $pPlato, $pBebida, $pMetodo, $pServicios)
        {
               $cost_invit = $pInvitados * 650;                        
               $total      = util::calc_costo_servicios($pServicios) + $cost_invit;//Llamamos a la funcion auxiliar pra calcular el costo
-              $referencia = strtoupper(substr(md5($pNombre . $pEvento . $pFecha), 0, 10));  // Generamos una referencia de pago única                   
+              $referencia = strtoupper(substr(md5($pAnfitrion . $pEvento . $pFecha), 0, 10));  // Generamos una referencia de pago única                   
               print "<h1 align='center'>FORMATO DE PAGO - $pPaquete </h1><br>";
               print "<table border='3' align='center' width='1000px' height='450px'  style='table-layout: fixed;'>";
               print "<tr> 
@@ -116,7 +115,7 @@ class mi_libreria{
                      <th style='width: 33%;'>LUGAR DEL EVENTO:</th>
               </tr>";
               print "<tr> 
-                     <td align='center' style='width: 33%;'>$pNombre</td> 
+                     <td align='center' style='width: 33%;'>$pAnfitrion</td> 
                      <td align='center' style='width: 33%;'>$pEvento</td> 
                      <td align='center' style='width: 33%;'>$pLugar</td>
               </tr>";
@@ -159,12 +158,12 @@ class mi_libreria{
                      <td colspan='3' align='center'>$pBebida</td>
                      </tr>";
               print "<tr>
-                     <th align='center' colspan='1'>Método de Pago(tarjeta):</th>
+                     <th align='center' colspan='1'>Método de Pago:</th>
                      <th align='center' colspan='2'>Total a pagar:</th>
                      </tr>";
               print "<tr> 
                      <td align='center' colspan='1'>$pMetodo</td>
-                     <td align='center' colspan='2'>$total</td>   
+                     <td align='center' colspan='2'>$$total.00</td>   
                      </tr>";
               print "<tr>
                      <th style='width: 33%;'>Referencia de pago:</th>
@@ -174,13 +173,13 @@ class mi_libreria{
        }
 
      /* Formato para paquete 3 y 4 */
-public function formato_cotizar2($pPaquete,$pNombre, $pEvento, $pLugar, $pFecha, $pHora,
+public function formato_cotizar2($pPaquete,$pAnfitrion, $pEvento, $pLugar, $pFecha, $pHora,
                             $pDuracion, $pInvitados, $pServicios_str, $pAperitivo, 
                             $pEntrada, $pPlato, $pPostre , $pBebida, $pMetodo, $pServicios)
        {
               $cost_invit = $pInvitados * 700;                        
               $total      = util::calc_costo_servicios($pServicios) + $cost_invit;//Llamamos a la funcion auxiliar pra calcular el costo
-              $referencia = strtoupper(substr(md5($pNombre . $pEvento . $pFecha), 0, 10));  // Generamos una referencia de pago única                   
+              $referencia = strtoupper(substr(md5($pAnfitrion . $pEvento . $pFecha), 0, 10));  // Generamos una referencia de pago única                   
               print "<h1 align='center'>FORMATO DE PAGO - $pPaquete </h1><br>";
               print "<table border='3' align='center' width='1000px' height='450px'  style='table-layout: fixed;'>";
               print "<tr> 
@@ -189,7 +188,7 @@ public function formato_cotizar2($pPaquete,$pNombre, $pEvento, $pLugar, $pFecha,
                      <th style='width: 33%;'>LUGAR DEL EVENTO:</th>
               </tr>";
               print "<tr> 
-                     <td align='center' style='width: 33%;'>$pNombre</td> 
+                     <td align='center' style='width: 33%;'>$pAnfitrion</td> 
                      <td align='center' style='width: 33%;'>$pEvento</td> 
                      <td align='center' style='width: 33%;'>$pLugar</td>
               </tr>";
