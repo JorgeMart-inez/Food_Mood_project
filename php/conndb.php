@@ -19,7 +19,7 @@ $password = 'Jorge#2005';
 try {
     $conn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conexión exitosa a la base de datos FOOD & MOOD.";
+    //echo "Conexión exitosa a la base de datos FOOD & MOOD.";
 } catch (PDOException $e) {
     echo "Error: No se pudo conectar a la base de datos. " . $e->getMessage();
 }
