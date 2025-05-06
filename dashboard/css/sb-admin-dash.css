@@ -49,6 +49,15 @@
     background-color: #fff;
     font-size: 14px;
 }
+.formulario-dash input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    font-size: 14px;
+}
 
 .table-dashboard {
     width: 100%;

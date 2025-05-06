@@ -1,10 +1,15 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM plato_fuerte ");
-$stmt->execute();
+    $id_postre = $_GET['id_postre'];
+    $stmt = $conn->prepare("SELECT * FROM postres WHERE id_postre = :id_postre");
+    $stmt->bindParam(':id_postre', $id_postre);
+    $stmt->execute();
 
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $row = $resultado[0] ?? null;
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +20,7 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Plato Fuerte</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>Tabla Aux. Postre</title>
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -374,69 +375,23 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Plato Fuerte</h1>
+                        <h1 class="titulo-table-dash">Modificar Postre</h1>
                     </div>
 
                     <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_plato_fuerte">Nombre: </label>
-                            <input type="text" name="nombre_plato_fuerte" id="nombre_plato_fuerte" placeholder="Nombre del plato_fuerte">
-                            <input type="submit" name="agregar-plato-fuerte" class="btn btn-sm btn-success" value="Ingresar Plato Fuerte">
+                        <form action="modificar_postre.php" autocomplete="off" method="POST" class="formulario-dash">
+                            <label for="id_postre">ID Postre:</label>
+                            <input type="text" name="id_postre" placeholder="ID" value="<?= $row['id_postre']?>" readonly>
+
+                            <label for="nombre_postre">Nombre: </label>
+                            <input type="text" name="nombre_postre" placeholder="Nombre del postre" value="<?= $row['nombre_postre']?>">
+                            
+                            <input type="submit" name="modificar-postre" class="btn btn-sm btn-success" value="Modificar postre">
+                            <input type="submit" name="cancelar" class="btn btn-sm btn-danger" value="Cancelar">
                         </form>
                     </div>
-                    <!-- End of Page Heading -->
 
-                    <!-- Table Content-Operations -->
-                    <div>
-                        <h3 class="titulo-table-dash">Lista de Platos Fuertes</h3>
-                        <table class="table-dashboard">
-                            <thead>
-                                <tr>
-                                    <th>ID Plato Fuerte</th>
-                                    <th>Nombre Plato Fuerte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_plato_fuerte']?></th>
-                                <th><?= $row['nombre_plato_fuerte']?></th>
-
-                                <th><form action=""><a name="modificar-plato-fuerte" class="btn btn-sm btn-primary shadow-sm" href="update_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_plato_fuerte'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_plato_fuerte'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_plato_fuerte'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_plato_fuerte'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el plato fuerte <strong><?= $row['nombre_plato_fuerte'] ?></strong>. Esta operación no se puede deshacer.
-                                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte'] ?>" class="btn btn-danger">Eliminar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--End of Table Content-Operations -->
-                
                 </div>
                 <!-- /.container-fluid -->
 
@@ -500,9 +455,6 @@ $stmt->execute();
     <!-- Page level custom scripts -->
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-pie-demo.js"></script>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

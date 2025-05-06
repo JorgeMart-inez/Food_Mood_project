@@ -33,7 +33,7 @@ if (isset($_POST['singup']))
     $stmt_insert->execute();
 
     $id_usuario = $conn->lastInsertId();
-    session_start();
+    session_start();    
     $_SESSION['id_usuario'] = $id_usuario;
     echo "<script>alert('Cuenta creada correctamente. Inicia sesión.'); window.location.href='../html/datos_personales.html';</script>";
 }

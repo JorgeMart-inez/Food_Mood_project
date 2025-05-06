@@ -386,7 +386,9 @@ $stmt->execute();
                             <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
                         </form>
                     </div>
+                    <!-- End of Page Heading -->
 
+                    <!-- Table Content-Operations -->
                     <div>
                         <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
                         <table class="table-dashboard">
@@ -405,7 +407,7 @@ $stmt->execute();
                                 <th><?= $row['id_aperitivo']?></th>
                                 <th><?= $row['nombre_aperitivo']?></th>
 
-                                <th><form action="update.php"><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
                                         Eliminar
                                     </button>
@@ -433,7 +435,8 @@ $stmt->execute();
                                 ?>
                             </tbody>
                         </table>
-                    </div> 
+                    </div>
+                    <!--End of Table Content-Operations -->
                 
                 </div>
                 <!-- /.container-fluid -->

@@ -21,7 +21,7 @@ if (isset($_POST['login'])) {
             $_SESSION['id_usuario'] = $usuario['id_usuario'];
             echo "<script>
             alert('Bienvenido Administrador');
-            window.location.href = '../php/menu_admin.php';
+            window.location.href = '../dashboard/index.html';
                 </script>";
         exit();
         }

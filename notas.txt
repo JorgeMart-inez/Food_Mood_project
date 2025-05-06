@@ -2,12 +2,11 @@
 -Hacer que el usuario que compra los paquetes, aparezca en el formato de pago, y en el formato de cotizacion,
  de manera que reciba la información personal de la cuenta loggeada.
 -Verificar que el usuario haya iniciado sesión en la app antes de poder cotizar un paquete.
--Quitar la referencia del formato cotizar, en su lugar crear una nueva funcíon que sea formato pago.
--Agregar funcion que restrinja la fecha de el evento a 5 dias despues de la cotizacion.
--Agregar lista de estados en mexico para el formulario de cliente
+-Agregar el icono de usuario en el navbar y la sesión actual de usuario.
+-Filtro de cotizaciones y pagos por usuario al dashboard.
+-Historial de cotizaciones por cliente, agregar al navbar.
+-Apartado de modificación de roles en dashboard
 
---Actividad de Topicos Av. de programación--
-Aplicar hilos mediante python para crear el formato PDF de pago
 
 --Objetivos de la actividad 2.4 de BD--
 1.- Diseñar el diagrama de proceso (flujo) de la app --->(check)

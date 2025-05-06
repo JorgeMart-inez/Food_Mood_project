@@ -1,3 +1,10 @@
+<?php
+include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
+
+$stmt = $conn->prepare("SELECT * FROM metodo_pago");
+$stmt->execute();
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +15,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Método de Pago</title>
+    <title>Tabla Aux. Método Pago</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +28,8 @@
         
     <!-- Custom styles for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/css/sb-admin-2.min.css" rel="stylesheet">
-
+    <link href="http://localhost/F&M_version1.7.1/dashboard/css/sb-admin-dash.css" rel="stylesheet">
+    
 </head>
 
 <body id="page-top">
@@ -362,6 +374,68 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Page Heading -->
+                    <div class="titulo-table-dash-container">
+                        <h1 class="titulo-table-dash">Tabla Auxiliar: Método de Pago</h1>
+                    </div>
+
+                    <div class="contenedor-formulario-dash">
+                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
+                            <label for="tipo_metodo_pago">Nombre: </label>
+                            <input type="text" name="tipo_metodo_pago" id="tipo_metodo_pago" placeholder="Nombre del Método de Pago">
+                            <input type="submit" name="agregar-metodo-pago" class="btn btn-sm btn-success" value="Ingresar Méetodo de Pago">
+                        </form>
+                    </div>
+                    <!-- End of Page Heading -->
+
+                    <!-- Table Content-Operations -->
+                    <div>
+                        <h3 class="titulo-table-dash">Lista de Métodos de Pago</h3>
+                        <table class="table-dashboard">
+                            <thead>
+                                <tr>
+                                    <th>ID Método de Pago</th>
+                                    <th>Tipo de Método</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
+                                ?>
+                                <tr>
+                                <th><?= $row['id_metodo_pago']?></th>
+                                <th><?= $row['tipo_metodo_pago']?></th>
+
+                                <th><form action=""><a name="modificar-metodo-pago" class="btn btn-sm btn-primary shadow-sm" href="update_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago']?>">Modificar</a></form></th>
+                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_metodo_pago'] ?>">
+                                        Eliminar
+                                    </button>
+                                    <div class="modal fade" id="modalEliminar<?= $row['id_metodo_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_metodo_pago'] ?>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_metodo_pago'] ?>">¿Estás seguro?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                </div>
+                                                    <div class="modal-body">
+                                                        Esta acción eliminará la metodo_pago <strong><?= $row['tipo_metodo_pago'] ?></strong>. Esta operación no se puede deshacer.
+                                                    </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <a href="delete_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago'] ?>" class="btn btn-danger">Eliminar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                                </tr>
+                                <?php 
+                                endwhile;
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--End of Table Content-Operations -->
                 
                 </div>
                 <!-- /.container-fluid -->
@@ -426,6 +500,9 @@
     <!-- Page level custom scripts -->
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-pie-demo.js"></script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
