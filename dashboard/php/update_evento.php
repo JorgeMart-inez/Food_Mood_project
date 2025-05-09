@@ -1,10 +1,15 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM evento");
-$stmt->execute();
+    $id_evento = $_GET['id_evento'];
+    $stmt = $conn->prepare("SELECT * FROM evento WHERE id_evento = :id_evento");
+    $stmt->bindParam(':id_evento', $id_evento);
+    $stmt->execute();
 
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $row = $resultado[0] ?? null;
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -16,10 +21,6 @@ $stmt->execute();
     <meta name="author" content="">
 
     <title>Tabla Prin. Evento</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -374,132 +375,39 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Filter Menu -->
-                    <form action="filtrar_evento.php" method="POST" autocomplete="off" class="filtro-container">
-                        
-                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
-                        <i class="fas fa-filter"></i>
-                        </button>
-
-                        <div id="panelFiltro" class="panel-filtro">
-
-                            <label for="id_evento_filter">ID de Evento:</label>
-                            <input type="number" name="id_evento_filter" id="id_evento_filter" placeholder="Busqueda por ID:">
-
-                            <label for="fecha_evento_filter">Busqueda por fecha de Evento </label>
-                            <input type="date" name="fecha_evento_filter" id="fecha_evento_filter" placeholder="Busqueda por fecha:">
-
-                            <label for="hora_evento_filter">Busqueda por hora de Evento</label>
-                            <input type="time" name="hora_evento_filter" id="hora_evento_filter" placeholder="Busqueda por hora:">
-
-                            <label for="duracion_evento_filter">Duración del Evento(horas): </label>
-                            <input type="number" name="duracion_evento_filter" id="duracion_evento_filter" placeholder="Busqueda por duración:">
-
-                            <label for="cantidad_invitados_filter">Número de Invitados: </label>
-                            <input type="number" name="cantidad_invitados_filter" id="cantidad_invitados_filter" placeholder="Busqueda por cantidad de invitados">
-
-                            <label for="tipo_evento_filter">Tipo de Evento: </label>
-                            <input type="text" name="tipo_evento_filter" id="tipo_evento_filter" placeholder="Busqueda por tipo de evento:">
-                        
-                            <input type="submit" name="filtrar-evento" value="Filtrar" class="btn-filter" />
-                        </div>
-                    </form>
-                    <!-- End of Filter Menu -->
-
-                    <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: EVENTO</h1>
+                        <h1 class="titulo-maintable-dash">Modificar Evento</h1>
                     </div>
 
-                    <!-- Botón flotante -->
-                    <button id="boton-flotante" class="boton-flotante">+</button>
+                    <div class="contenedor-formulario-dash">
+                        <form action="modificar_evento.php" autocomplete="off" method="POST" class="formulario-dash">
 
-                    <div id="formulario-flotante" class="contenedor-formulario oculto">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                            <label for="id_evento">ID del Evento: </label>
+                            <input type="number" name="id_evento" id="id_evento" value="<?= $row['id_evento']?>" readonly>
+
                             <label for="fecha_evento">Fecha de Evento </label>
-                            <input type="date" name="fecha_evento" id="fecha_evento" placeholder="yyyy-mm-dd">
+                            <input type="date" name="fecha_evento" id="fecha_evento" value="<?= $row['fecha_evento']?>" placeholder="yyyy-mm-dd">
 
                             <label for="lugar_evento">Lugar del evento: </label>
-                            <input type="text" name="lugar_evento" id="lugar_evento" placeholder="Dirección del evento">
+                            <input type="text" name="lugar_evento" id="lugar_evento" value="<?= $row['lugar_evento']?>" placeholder="Dirección del evento">
 
                             <label for="hora_evento">Hora de Evento</label>
-                            <input type="time" name="hora_evento" id="hora_evento" placeholder="hh:mm">
+                            <input type="time" name="hora_evento" id="hora_evento" value="<?= $row['hora_evento']?>" placeholder="hh:mm">
 
                             <label for="duracion_evento">Duración del Evento(horas): </label>
-                            <input type="number" name="duracion_evento" id="duracion_evento" placeholder="Duración del evento en horas">
+                            <input type="number" name="duracion_evento" id="duracion_evento" value="<?= $row['duracion_evento']?>" placeholder="Duración del evento en horas">
 
                             <label for="cantidad_invitados">Número de Invitados: </label>
-                            <input type="number" name="cantidad_invitados" id="cantidad_invitados" placeholder="Cantidad de invitados">
+                            <input type="number" name="cantidad_invitados" id="cantidad_invitados" value="<?= $row['cantidad_invitados']?>" placeholder="Cantidad de invitados">
 
                             <label for="tipo_evento">Tipo de Evento: </label>
-                            <input type="text" name="tipo_evento" id="tipo_evento" placeholder="Ej: Cumpleaños, Boda, Ejecutivo, etc.">
-
-                            <input type="submit" name="agregar-evento" class="btn btn-sm btn-success" value="Ingresar Evento">
+                            <input type="text" name="tipo_evento" id="tipo_evento" value="<?= $row['tipo_evento']?>" placeholder="Ej: Cumpleaños, Boda, Ejecutivo, etc.">
+                            
+                            <input type="submit" name="modificar-evento" class="btn btn-sm btn-success" value="Modificar Evento">
+                            <input type="submit" name="cancelar" class="btn btn-sm btn-danger" value="Cancelar">
                         </form>
                     </div>
-                    <!-- End of Page Heading -->
 
-                    <!-- Table Content-Operations -->
-                    <div>
-                        <h3 class="titulo-table-dash">Lista de Eventos</h3>
-                        <table class="table-dashboard">
-                            <thead>
-                                <tr>
-                                    <th>ID Evento</th>
-                                    <th>Fecha de Evento</th>
-                                    <th>Lugar del Evento</th>
-                                    <th>Hora del Evento</th>
-                                    <th>Duración del Evento</th>
-                                    <th>Cantidad de Invitados</th>
-                                    <th>Tipo de Evento</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_evento']?></td>
-                                <td><?= $row['fecha_evento']?></td>
-                                <td><?= $row['lugar_evento']?></td>
-                                <td><?= $row['hora_evento']?></td>
-                                <td><?= $row['duracion_evento']?></td>
-                                <td><?= $row['cantidad_invitados']?></td>
-                                <td><?= $row['tipo_evento']?></td>
-                                
-                                <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_evento'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_evento'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_evento'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_evento'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el evento <strong><?= $row['id_evento'] ?></strong>. Esta operación no se puede deshacer.
-                                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--End of Table Content-Operations -->
-                
                 </div>
                 <!-- /.container-fluid -->
 
@@ -563,12 +471,6 @@ $stmt->execute();
     <!-- Page level custom scripts -->
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-pie-demo.js"></script>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Custom JS for the filter btn and insert btn -->
-    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

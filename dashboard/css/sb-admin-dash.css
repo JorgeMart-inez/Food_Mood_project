@@ -11,6 +11,111 @@
     align-items: center;
 }
 
+.boton-flotante {
+    position: absolute;
+    top: 90px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background-color: #28a745;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.boton-flotante i{
+    font-size: 25px;
+    transition: transform 0.3s ease;
+}
+
+.contenedor-formulario {
+    display: flex;
+    bottom: 90px;
+    margin-left: 740px;
+    margin-top: -20px;
+    z-index: 999;
+    max-width: 550px;
+}
+
+.oculto {
+    display: none;
+}
+
+.filtro-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.btn-filtro {
+    position: absolute ;
+    top: -2px;
+    right: 70px; 
+    background-color: #2e77e6;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+
+.btn-filtro.rotar {
+    transform: rotate(180deg);
+}
+
+.btn-filtro i {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.btn-filter{
+    background-color: #28a745; 
+    width: 100%; 
+    margin-top: 10px;
+}
+
+.panel-filtro {
+    position: absolute;
+    top: 10px;
+    right: 90px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    width: 250px;
+    display: none;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.panel-filtro input,
+.panel-filtro select {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.panel-filtro label {
+    font-weight: bold;
+    font-size: 13px;
+}
+
 .contenedor-formulario-dash {
     display: flex;
     justify-content: center;
@@ -33,23 +138,41 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.formulario-dash label {
+.formulario-maintable-dash {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #d9e7f2;
+    border: px solid #000000;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 20px;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.formulario-dash, .formulario-maintable-dash label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.formulario-dash input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background-color: #fff;
-    font-size: 14px;
-}
-.formulario-dash input[type="number"] {
+.formulario-dash input[type="text"],
+.formulario-maintable-dash input[type="text"],
+.formulario-dash input[type="number"],
+.formulario-maintable-dash input[type="number"],
+.formulario-dash input[type="email"],
+.formulario-maintable-dash input[type="email"],
+.formulario-dash input[type="password"],
+.formulario-maintable-dash input[type="password"],
+.formulario-dash select,
+.formulario-maintable-dash select,
+.formulario-dash input[type="date"],
+.formulario-maintable-dash input[type="date"],
+.formulario-dash input[type="time"],
+.formulario-maintable-dash input[type="time"]{
     width: 100%;
     padding: 10px;
     margin-bottom: 16px;
@@ -67,6 +190,7 @@
     background-color: #fff;
     color: #333;
 }
+
 
 .table-dashboard th{
     border: 1px solid #e0e0e0;
@@ -97,3 +221,13 @@
     color: #2c2c2c;
     text-align: center;
 }
+
+.title-maintable-dash{
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1e298f;
+    text-align: center;
+}
+
+

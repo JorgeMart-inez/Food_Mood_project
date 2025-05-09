@@ -1,10 +1,67 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM evento");
+// Inicializa los filtros
+$id_evento_filter           = isset($_POST['id_evento_filter'])          ? $_POST['id_evento_filter']          : '';
+$fecha_evento_filter        = isset($_POST['fecha_evento_filter'])       ? $_POST['fecha_evento_filter']       : '';
+$hora_evento_filter         = isset($_POST['hora_evento_filter'])        ? $_POST['hora_evento_filter']        : '';
+$duracion_evento_filter     = isset($_POST['duracion_evento_filter '])   ? $_POST['duracion_evento_filter ']   : '';
+$cantidad_invitados_filter  = isset($_POST['cantidad_invitados_filter']) ? $_POST['cantidad_invitados_filter'] : '';
+$tipo_evento_filter         = isset($_POST['tipo_evento_filter'])        ? $_POST['tipo_evento_filter']        : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM evento WHERE 1=1";
+
+if (!empty($id_evento_filter)) {
+    $query .= " AND id_evento = :id_evento_filter";
+}
+if (!empty($fecha_evento_filter)) {
+    $query .= " AND fecha_evento = :fecha_evento_filter";
+}
+if (!empty($hora_evento_filter)) {
+    $query .= " AND hora_evento = :hora_evento_filter";
+}
+if (!empty($duracion_evento_filter )) {
+    $query .= " AND duracion_evento = :duracion_evento_filter ";
+}
+if (!empty($cantidad_invitados_filter)) {
+    $query .= " AND cantidad_invitados = :cantidad_invitados_filter";
+}
+if (!empty($tipo_evento_filter)) {
+    $query .= " AND tipo_evento = :tipo_evento_filter";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_evento_filter)) {
+    $stmt->bindParam(':id_evento_filter', $id_evento_filter, PDO::PARAM_INT);
+}
+if (!empty($fecha_evento_filter)) {
+    $stmt->bindValue(':fecha_evento_filter', '%' . $fecha_evento_filter . '%', PDO::PARAM_STR);
+}
+if (!empty($hora_evento_filter)) {
+    $stmt->bindValue(':hora_evento_filter', '%' . $hora_evento_filter . '%', PDO::PARAM_STR);
+}
+if (!empty($duracion_evento_filter)) {
+    $stmt->bindParam(':duracion_evento_filter', $duracion_evento_filter, PDO::PARAM_INT);
+}
+if (!empty($cantidad_invitados_filter)) {
+    $stmt->bindParam(':cantidad_invitados_filter', $cantidad_invitados_filter, PDO::PARAM_INT);
+}
+if (!empty($tipo_evento_filter)) {
+    $stmt->bindParam(':tipo_evento_filter', $tipo_evento_filter, PDO::PARAM_STR);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,7 +76,6 @@ $stmt->execute();
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -440,12 +496,13 @@ $stmt->execute();
                     <!-- End of Page Heading -->
 
                     <!-- Table Content-Operations -->
+
                     <div>
                         <h3 class="titulo-table-dash">Lista de Eventos</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Evento</th>
+                                <th>ID Evento</th>
                                     <th>Fecha de Evento</th>
                                     <th>Lugar del Evento</th>
                                     <th>Hora del Evento</th>
@@ -457,44 +514,46 @@ $stmt->execute();
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_evento']?></td>
-                                <td><?= $row['fecha_evento']?></td>
-                                <td><?= $row['lugar_evento']?></td>
-                                <td><?= $row['hora_evento']?></td>
-                                <td><?= $row['duracion_evento']?></td>
-                                <td><?= $row['cantidad_invitados']?></td>
-                                <td><?= $row['tipo_evento']?></td>
-                                
-                                <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_evento'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_evento'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_evento'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_evento'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el evento <strong><?= $row['id_evento'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['fecha_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['lugar_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['hora_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['duracion_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['cantidad_invitados']) ?></td>
+                                            <td><?= htmlspecialchars($row['tipo_evento']) ?></td>
+                                            <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_evento'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_evento'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_evento'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_evento'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el evento <strong><?= $row['id_evento']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

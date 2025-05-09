@@ -1,10 +1,46 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM evento");
+// Inicializa los filtros
+$id_usuario     = isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
+$correo_usuario = isset($_POST['correo_usuario']) ? $_POST['correo_usuario'] : '';
+$rol_usuario    = isset($_POST['rol_usuario']) ? $_POST['rol_usuario'] : '';
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM usuario WHERE 1=1";
+
+if (!empty($id_usuario)) {
+    $query .= " AND id_usuario = :id_usuario";
+}
+if (!empty($correo_usuario)) {
+    $query .= " AND correo LIKE :correo_usuario";
+}
+if (!empty($rol_usuario)) {
+    $query .= " AND rol = :rol_usuario";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_usuario)) {
+    $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+}
+if (!empty($correo_usuario)) {
+    $correo_usuario = "%$correo_usuario%";
+    $stmt->bindParam(':correo_usuario', $correo_usuario, PDO::PARAM_STR);
+}
+if (!empty($rol_usuario)) {
+    $stmt->bindParam(':rol_usuario', $rol_usuario, PDO::PARAM_STR);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +51,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Prin. Evento</title>
+    <title>Tabla Prin. Usuario</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -375,126 +410,115 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_evento.php" method="POST" autocomplete="off" class="filtro-container">
-                        
+                    <form action="filtrar_usuario.php" method="POST" autocomplete="off" class="filtro-container">
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
                         </button>
 
                         <div id="panelFiltro" class="panel-filtro">
+                        <label>ID Usuario:</label>
+                        <input type="number" name="id_usuario" placeholder="Buscar por ID" />
 
-                            <label for="id_evento_filter">ID de Evento:</label>
-                            <input type="number" name="id_evento_filter" id="id_evento_filter" placeholder="Busqueda por ID:">
+                        <label>Correo:</label>
+                        <input type="email" name="correo_usuario" placeholder="Buscar por Correo" />
 
-                            <label for="fecha_evento_filter">Busqueda por fecha de Evento </label>
-                            <input type="date" name="fecha_evento_filter" id="fecha_evento_filter" placeholder="Busqueda por fecha:">
+                        <label>Rol:</label>
+                        <select name="rol_usuario">
+                            <option value="">Todos</option>
+                            <option value="usuario">Usuario</option>
+                            <option value="admin">Administrador</option>
+                        </select>
 
-                            <label for="hora_evento_filter">Busqueda por hora de Evento</label>
-                            <input type="time" name="hora_evento_filter" id="hora_evento_filter" placeholder="Busqueda por hora:">
-
-                            <label for="duracion_evento_filter">Duración del Evento(horas): </label>
-                            <input type="number" name="duracion_evento_filter" id="duracion_evento_filter" placeholder="Busqueda por duración:">
-
-                            <label for="cantidad_invitados_filter">Número de Invitados: </label>
-                            <input type="number" name="cantidad_invitados_filter" id="cantidad_invitados_filter" placeholder="Busqueda por cantidad de invitados">
-
-                            <label for="tipo_evento_filter">Tipo de Evento: </label>
-                            <input type="text" name="tipo_evento_filter" id="tipo_evento_filter" placeholder="Busqueda por tipo de evento:">
-                        
-                            <input type="submit" name="filtrar-evento" value="Filtrar" class="btn-filter" />
+                        <input type="submit" name="filtrar-cliente" value="Filtrar" class="btn-filter" />
                         </div>
                     </form>
                     <!-- End of Filter Menu -->
-
+                    
                     <!-- Page Heading -->
+
                     <div class="titulo-table-dash-container">
-                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: EVENTO</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: USUARIO</h1>
                     </div>
 
                     <!-- Botón flotante -->
                     <button id="boton-flotante" class="boton-flotante">+</button>
 
+                    <!-- Contenedor del formulario oculto -->
                     <div id="formulario-flotante" class="contenedor-formulario oculto">
                         <form action="insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
-                            <label for="fecha_evento">Fecha de Evento </label>
-                            <input type="date" name="fecha_evento" id="fecha_evento" placeholder="yyyy-mm-dd">
+                        <label for="correo_usuario">Correo: </label>
+                            <input type="email" name="correo" id="correo" placeholder="Correo del Usuario">
 
-                            <label for="lugar_evento">Lugar del evento: </label>
-                            <input type="text" name="lugar_evento" id="lugar_evento" placeholder="Dirección del evento">
-
-                            <label for="hora_evento">Hora de Evento</label>
-                            <input type="time" name="hora_evento" id="hora_evento" placeholder="hh:mm">
-
-                            <label for="duracion_evento">Duración del Evento(horas): </label>
-                            <input type="number" name="duracion_evento" id="duracion_evento" placeholder="Duración del evento en horas">
-
-                            <label for="cantidad_invitados">Número de Invitados: </label>
-                            <input type="number" name="cantidad_invitados" id="cantidad_invitados" placeholder="Cantidad de invitados">
-
-                            <label for="tipo_evento">Tipo de Evento: </label>
-                            <input type="text" name="tipo_evento" id="tipo_evento" placeholder="Ej: Cumpleaños, Boda, Ejecutivo, etc.">
-
-                            <input type="submit" name="agregar-evento" class="btn btn-sm btn-success" value="Ingresar Evento">
+                            <label for="contrasenia_usuario">Contraseña:</label>
+                            <input type="password" name="contrasenia1" id="correo" maxlength="8" minlength="8" placeholder="Contraseña del Usuario">
+                            
+                            <label for="contrasenia_usuario">Confirmar Contraseña:</label>
+                            <input type="password" name="contrasenia2" id="correo" maxlength="8" minlength="8" placeholder="Reingrese la Contraseña">
+                            
+                            <label for="rol_usuario">Rol:</label>
+                            <select name="rol" id="rol">
+                                    <option value="" disabled selected>Seleccione el rol</option>
+                                    <option value="usuario">Usuario</option>
+                                    <option value="admin">Administrador</option>
+                            </select><br>
+                            <input type="submit" name="agregar-usuario" class="btn btn-sm btn-success" value="Ingresar Usuario">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
 
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Eventos</h3>
+                        <h3 class="titulo-table-dash">Lista de Usuarios</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Evento</th>
-                                    <th>Fecha de Evento</th>
-                                    <th>Lugar del Evento</th>
-                                    <th>Hora del Evento</th>
-                                    <th>Duración del Evento</th>
-                                    <th>Cantidad de Invitados</th>
-                                    <th>Tipo de Evento</th>
+                                    <th>ID Usuario</th>
+                                    <th>Correo Usuario</th>
+                                    <th>Contraseña</th>
+                                    <th>Rol</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_evento']?></td>
-                                <td><?= $row['fecha_evento']?></td>
-                                <td><?= $row['lugar_evento']?></td>
-                                <td><?= $row['hora_evento']?></td>
-                                <td><?= $row['duracion_evento']?></td>
-                                <td><?= $row['cantidad_invitados']?></td>
-                                <td><?= $row['tipo_evento']?></td>
-                                
-                                <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_evento'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_evento'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_evento'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_evento'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el evento <strong><?= $row['id_evento'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_usuario']) ?></td>
+                                            <td><?= htmlspecialchars($row['correo']) ?></td>
+                                            <td><?= htmlspecialchars($row['contrasenia']) ?></td>
+                                            <td><?= htmlspecialchars($row['rol']) ?></td>
+                                            <th><form action=""><a name="modificar-usuario" class="btn btn-sm btn-primary shadow-sm" href="update_usuario.php?id_usuario=<?= $row['id_usuario']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_usuario'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_usuario'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_usuario'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_usuario'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el usuario <strong><?= $row['correo'] ?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="delete_usuario.php?id_usuario=<?= $row['id_usuario'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

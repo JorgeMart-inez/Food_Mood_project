@@ -83,7 +83,7 @@ else if(!empty($_POST['agregar-servicio']))
 }
 else if(!empty($_POST['agregar-metodo-pago']))
 {
-    $id_metodo_pago     = null;
+    $id_metodo_pago   = null;
     $tipo_metodo_pago = $_POST['tipo_metodo_pago'];
 
     $stmt = $conn->prepare("INSERT INTO metodo_pago (tipo_metodo_pago) 
@@ -93,6 +93,91 @@ else if(!empty($_POST['agregar-metodo-pago']))
     {
         header("Location: metodo_pago.php");
     }
+}
+else if(!empty($_POST['agregar-usuario']))
+{
+    $id_usuario      = null;
+    $correo_usuario  = $_POST['correo'];
+    $contrasenia1    = $_POST['contrasenia1'];
+    $contrasenia2    = $_POST['contrasenia2'];
+    $rol_usuario     = $_POST['rol'];
+
+    if($contrasenia1 !== $contrasenia2)
+    {
+        echo "<script>alert('Las contraseñas no coinciden'); window.location.href='usuario.php';</script>";
+        exit();
+    }
+
+    $sql = "SELECT * FROM usuario WHERE correo = :correo";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':correo', $correo);
+    $stmt->execute();
+
+    if ($stmt->fetch()) 
+    {
+        echo "<script>alert('Ya existe una cuenta con este correo.'); window.location.href='usuario.php';</script>";
+        exit();
+    }
+
+
+    $stmt = $conn->prepare("INSERT INTO usuario (correo, contrasenia, rol) 
+                                    VALUES (:correo, :contrasenia1, :rol)");
+    $stmt->bindParam(':correo'      , $correo_usuario);
+    $stmt->bindParam(':contrasenia1', $contrasenia1);
+    $stmt->bindParam(':rol'         , $rol_usuario);
+    if($stmt->execute())
+    {
+        header("Location: usuario.php");
+    }
+}
+else if(!empty($_POST['agregar-cliente']))
+{
+    $id_cliente       = null;
+    $nombre_cliente   = $_POST['nombre_cliente'];
+    $apellido_cliente = $_POST['apellido_cliente'];
+    $telefono_cliente = $_POST['telefono_cliente'];
+    $estado_cliente   = $_POST['estado_cliente'];
+    $fk_usuario       = $_POST['fk_usuario'];
+
+
+    $stmt = $conn->prepare("INSERT INTO cliente (nombre, apellido, telefono, estado, fk_usuario) 
+                                    VALUES (:nombre_cliente, :apellido_cliente, :telefono_cliente, 
+                                            :estado_cliente, :fk_usuario)");
+    $stmt->bindParam(':nombre_cliente'  , $nombre_cliente);
+    $stmt->bindParam(':apellido_cliente', $apellido_cliente);
+    $stmt->bindParam(':telefono_cliente', $telefono_cliente);
+    $stmt->bindParam(':estado_cliente'  , $estado_cliente);
+    $stmt->bindParam(':fk_usuario'      , $fk_usuario);
+    if($stmt->execute())
+    {
+        header("Location: cliente.php");
+    }
+}
+else if(!empty($_POST['agregar-evento']))
+{
+    $id_evento          = null;
+    $fecha_evento       = $_POST['fecha_evento'];
+    $lugar_evento       = $_POST['lugar_evento'];
+    $hora_evento        = $_POST['hora_evento'];
+    $duracion_evento    = $_POST['duracion_evento'];
+    $cantidad_invitados = $_POST['cantidad_invitados'];
+    $tipo_evento        = $_POST['tipo_evento'];
+
+    $stmt = $conn->prepare("INSERT INTO evento (fecha_evento, lugar_evento, hora_evento, duracion_evento, 
+                                                        cantidad_invitados, tipo_evento)
+                                    VALUES (:fecha_evento, :lugar_evento, :hora_evento, 
+                                            :duracion_evento, :cantidad_invitados, :tipo_evento)");
+    $stmt->bindParam(':fecha_evento'       , $fecha_evento);
+    $stmt->bindParam(':lugar_evento'       , $lugar_evento);
+    $stmt->bindParam(':hora_evento'        , $hora_evento);
+    $stmt->bindParam(':duracion_evento'    , $duracion_evento);
+    $stmt->bindParam(':cantidad_invitados' , $cantidad_invitados);
+    $stmt->bindParam(':tipo_evento'        , $tipo_evento);
+    if($stmt->execute())
+    {
+        header("Location: evento.php");
+    }
+
 }
 else
 {

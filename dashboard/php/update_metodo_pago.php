@@ -387,7 +387,7 @@ include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
                             <label for="tipo_metodo_pago">Nombre: </label>
                             <input type="text" name="tipo_metodo_pago" placeholder="Nombre del Método de Pago" value="<?= $row['tipo_metodo_pago']?>">
                             
-                            <input type="submit" name="modificar-plato-fuerte" class="btn btn-sm btn-success" value="Modificar Método de Pago">
+                            <input type="submit" name="modificar-metodo-pago" class="btn btn-sm btn-success" value="Modificar Método de Pago">
                             <input type="submit" name="cancelar" class="btn btn-sm btn-danger" value="Cancelar">
                         </form>
                     </div>

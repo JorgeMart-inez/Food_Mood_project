@@ -3,9 +3,16 @@
  de manera que reciba la información personal de la cuenta loggeada.
 -Verificar que el usuario haya iniciado sesión en la app antes de poder cotizar un paquete.
 -Agregar el icono de usuario en el navbar y la sesión actual de usuario.
--Filtro de cotizaciones y pagos por usuario al dashboard.
 -Historial de cotizaciones por cliente, agregar al navbar.
+-Historial de fotos de catering dinámico.
+
+--Ideas para agreagar al dashboard--
 -Apartado de modificación de roles en dashboard
+-Filtro de busqueda en tablas principales al dashboard.
+-Filtro de busqueda a tablas auxiliares.
+-Que muestres la sesión admin iniciada en el dashboard
+
+
 
 
 --Objetivos de la actividad 2.4 de BD--

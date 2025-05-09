@@ -11,7 +11,7 @@ if (isset($_POST['singup']))
     {
         echo "<script>alert('Las contraseñas no coinciden'); window.location.href='../html/singup.html';</script>";
         exit();
-    }
+    }   
     
     $sql = "SELECT * FROM usuario WHERE correo = :correo";
     $stmt = $conn->prepare($sql);
