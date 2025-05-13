@@ -1,10 +1,59 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM pago");
+// Inicializa los filtros
+$id_pago_filter  = isset($_POST['id_pago_filter']) ? $_POST['id_pago_filter'] : '';
+$fk_paquete      = isset($_POST['fk_paquete'])     ? $_POST['fk_paquete']     : '';
+$fk_cotizacion   = isset($_POST['fk_cotizacion'])  ? $_POST['fk_cotizacion']  : '';
+$fk_cliente      = isset($_POST['fk_cliente'])     ? $_POST['fk_cliente']     : '';
+$fk_datos_pago   = isset($_POST['fk_datos_pago'])  ? $_POST['fk_datos_pago']  : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM pago WHERE 1=1";
+
+if (!empty($id_pago_filter)) {
+    $query .= " AND id_pago = :id_pago_filter";
+}
+if (!empty($fk_paquete)){
+    $query .= " AND fk_paquete = :fk_paquete";
+}
+if (!empty($fk_cotizacion)){
+    $query .= " AND fk_cotizacion = :fk_cotizacion";
+}
+if (!empty($fk_cliente)){
+    $query .= " AND fk_cliente = :fk_cliente";
+}
+if (!empty($fk_datos_pago)){
+    $query .= " AND fk_datos_pago = :fk_datos_pago";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_pago_filter)) {
+    $stmt->bindParam(':id_pago_filter', $id_pago_filter, PDO::PARAM_INT);
+}
+if (!empty($fk_paquete)) {
+    $stmt->bindParam(':fk_paquete', $fk_paquete, PDO::PARAM_INT);
+}
+if (!empty($fk_cotizacion)) {
+    $stmt->bindParam(':fk_cotizacion', $fk_cotizacion, PDO::PARAM_INT);
+}
+if (!empty($fk_cliente)) {
+    $stmt->bindParam(':fk_cliente', $fk_cliente, PDO::PARAM_INT);
+}
+if (!empty($fk_datos_pago)) {
+    $stmt->bindParam(':fk_datos_pago', $fk_datos_pago, PDO::PARAM_INT);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,7 +68,6 @@ $stmt->execute();
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -431,9 +479,11 @@ $stmt->execute();
                     </div>
                     <!-- End of Page Heading -->
 
+
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Pago</h3>
+                        <h3 class="titulo-table-dash">Lista de Datos de Pago</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
@@ -447,42 +497,44 @@ $stmt->execute();
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_pago']?></td>
-                                <td><?= $row['fk_paquete']?></td>
-                                <td><?= $row['fk_cotizacion']?></td>
-                                <td><?= $row['fk_cliente']?></td>
-                                <td><?= $row['fk_datos_pago']?></td>
-                                
-                                <th><form action=""><a name="modificar-pago" class="btn btn-sm btn-primary shadow-sm" href="update_pago.php?id_pago=<?= $row['id_pago']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_pago'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_pago'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_pago'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el dato de pago <strong><?= $row['id_pago'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_paquete']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_cotizacion']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_cliente']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_datos_pago']) ?></td>
+                                            <th><form action=""><a name="modificar-pago" class="btn btn-sm btn-primary shadow-sm" href="update_pago.php?id_pago=<?= $row['id_pago']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_pago'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_pago'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_pago'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el pago <strong><?= $row['id_pago']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="delete_pago.php?id_pago=<?= $row['id_pago'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_pago.php?id_pago=<?= $row['id_pago'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

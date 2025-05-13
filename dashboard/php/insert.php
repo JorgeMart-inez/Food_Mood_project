@@ -179,6 +179,127 @@ else if(!empty($_POST['agregar-evento']))
     }
 
 }
+else if(!empty($_POST['agregar-paquete']))
+{
+    $id_paquete         = null;
+    $nombre_paquete     = $_POST['nombre_paquete'];
+    $anfitrion          = $_POST['anfitrion'];
+    $fk_evento          = $_POST['fk_evento'];
+    $fk_aperitivo       = $_POST['fk_aperitivo'];
+    $fk_entrada         = $_POST['fk_entrada'];
+    $fk_plato_fuerte    = $_POST['fk_plato_fuerte'];
+    $fk_postre          = $_POST['fk_postre'];
+    $fk_bebida          = $_POST['fk_bebida'];
+    $fk_metodo_pago     = $_POST['fk_metodo_pago'];
+
+    $stmt = $conn->prepare("INSERT INTO paquete (nombre_paquete, anfitrion, fk_aperitivo, fk_aperitivo, 
+                                    fk_entrada, fk_plato_fuerte, fk_postre, fk_bebida, fk_metodo_pago)
+                                    VALUES (:nombre_paquete, :anfitrion, :fk_aperitivo, :fk_aperitivo, :fk_entrada,
+                                            :fk_plato_fuerte, :fk_postre, :fk_bebida, :fk_metodo_pago)");
+    $stmt->bindParam(':fecha_evento'     , $fecha_evento);
+    $stmt->bindParam(':anfitrion'        , $anfitrion);
+    $stmt->bindParam(':fk_aperitivo'     , $fk_aperitivo);
+    $stmt->bindParam(':fk_aperitivo'     , $fk_aperitivo);
+    $stmt->bindParam(':fk_entrada'       , $fk_entrada);
+    $stmt->bindParam(':fk_plato_fuerte'  , $fk_plato_fuerte);
+    $stmt->bindParam(':fk_postre'        , $fk_postre);
+    $stmt->bindParam(':fk_bebida'        , $fk_bebida);
+    $stmt->bindParam(':fk_metodo_pago'   , $fk_metodo_pago);
+    if($stmt->execute())
+    {
+        header("Location: paquete.php");
+    }
+}
+else if(!empty($_POST['agregar-paquete-servicio'])){
+    $fk_paquete  = $_POST['id_paquete'];
+    $fk_servicio = $_POST['id_servicio'];
+    $fk_cliente  = $_POST['id_cliente'];
+
+    $stmt = $conn->prepare("INSERT INTO paquete_servicio (fk_paquete, fk_servicio, fk_cliente)
+                                    VALUES (:id_paquete, :id_servicio, :id_cliente)");
+    $stmt->bindParam(':id_paquete' , $fk_paquete , PDO::PARAM_INT);
+    $stmt->bindParam(':id_servicio', $fk_servicio, PDO::PARAM_INT);
+    $stmt->bindParam(':id_cliente' , $fk_cliente , PDO::PARAM_INT);
+    if($stmt->execute())
+    {
+        header("Location: paquete_servicio.php");
+    }
+}
+else if(!empty($_POST['agregar-datos-pago'])){
+    $referencia_pago = $_POST['referencia_pago'];
+    $fk_metodo_pago  = $_POST['fk_metodo_pago'];
+    $estado_pago     = $_POST['estado_pago'];
+    $fecha_pago      = $_POST['fecha_pago'];
+    $fk_cliente      = $_POST['fk_cliente'];
+    $fk_usuario      = $_POST['fk_usuario'];
+
+    $stmt = $conn->prepare("INSERT INTO datos_pago (referencia_pago, 
+                                                            fk_metodo_pago, 
+                                                            estado_pago, 
+                                                            fecha_pago, 
+                                                            fk_cliente, 
+                                                            fk_usuario)
+                                    VALUES (:referencia_pago, 
+                                            :fk_metodo_pago, 
+                                            :estado_pago, 
+                                            :fecha_pago, 
+                                            :fk_cliente, 
+                                            :fk_usuario)");
+    $stmt->bindParam(':referencia_pago', $referencia_pago, PDO::PARAM_STR);
+    $stmt->bindParam(':fk_metodo_pago' , $fk_metodo_pago , PDO::PARAM_STR);
+    $stmt->bindParam(':estado_pago'    , $estado_pago    , PDO::PARAM_STR);
+    $stmt->bindParam(':fecha_pago'     , $fecha_pago     , PDO::PARAM_STR);
+    $stmt->bindParam(':fk_cliente'     , $fk_cliente     , PDO::PARAM_INT);
+    $stmt->bindParam(':fk_usuario'     , $fk_usuario     , PDO::PARAM_INT);
+    if($stmt->execute())
+    {
+        header("Location: datos_pago.php");
+    }
+}
+else if(!empty($_POST['agregar-pago'])){
+    $fk_paquete    = $_POST['fk_paquete'];
+    $fk_cotizacion = $_POST['fk_cotizacion'];
+    $fk_cliente    = $_POST['fk_cliente'];
+    $fk_datos_pago = $_POST['fk_datos_pago'];
+
+    $stmt = $conn->prepare("INSERT INTO pago(fk_paquete, 
+                                                    fk_cotizacion, 
+                                                    fk_cliente, 
+                                                    fk_datos_pago)
+                                    VALUES (:fk_paquete, 
+                                            :fk_cotizacion, 
+                                            :fk_cliente,
+                                            :fk_datos_pago)");
+    $stmt->bindParam(':fk_paquete'   , $fk_paquete   , PDO::PARAM_INT);
+    $stmt->bindParam(':fk_cotizacion', $fk_cotizacion, PDO::PARAM_INT);
+    $stmt->bindParam(':fk_cliente'   , $fk_cliente   , PDO::PARAM_INT);
+    $stmt->bindParam(':fk_datos_pago', $fk_datos_pago, PDO::PARAM_INT);
+    if($stmt->execute()){
+        header("Location: pago.php");
+    }
+}
+else if(!empty($_POST['agregar-cotizacion'])){
+    $fk_paquete = $_POST['fk_paquete'];
+    $fk_cliente = $_POST['fk_cliente'];
+    $fk_evento  = $_POST['fk_evento'];
+    $total      = $_POST['total'];
+
+    $stmt = $conn->prepare("INSERT INTO cotizacion (fk_paquete,
+                                                            fk_cliente,
+                                                            fk_evento,
+                                                            total)
+                                    VALUES (:fk_paquete,
+                                            :fk_cliente,
+                                            :fk_evento,
+                                            :total)");
+    $stmt->bindParam(':fk_paquete'   , $fk_paquete   , PDO::PARAM_INT);
+    $stmt->bindParam(':fk_cliente'   , $fk_cliente   , PDO::PARAM_INT);
+    $stmt->bindParam(':fk_evento'    , $fk_evento    , PDO::PARAM_INT);
+    $stmt->bindParam(':total'        , $total        , PDO::PARAM_INT);
+    if($stmt->execute()){
+        header("Location: cotizacion.php");
+    }
+}
 else
 {
     echo "Error: No se pudo agregar el elemento.";

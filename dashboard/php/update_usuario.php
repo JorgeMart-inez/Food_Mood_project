@@ -389,9 +389,9 @@ include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
                             <label for="rol_usuario">Rol:</label>
                             <select name="rol_usuario" id="rol">
-                                    <option value="">Seleccione el rol</option>
-                                    <option value="usuario">Usuario</option>
-                                    <option value="admin">Administrador</option>
+                                    <option disabled selected value="">Seleccione el rol</option>
+                                    <option value="usuario" <?= $row['rol'] == 'usuario' ? 'selected' : ''?>>Usuario</option>
+                                    <option value="admin"   <?= $row['rol'] == 'admin'   ? 'selected' : ''?>>Administrador</option>
                             </select><br>
                             
                             <input type="submit" name="modificar-usuario" class="btn btn-sm btn-success" value="Modificar Usuario">

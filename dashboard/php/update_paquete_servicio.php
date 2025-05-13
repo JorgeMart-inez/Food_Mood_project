@@ -1,9 +1,13 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM pago");
-$stmt->execute();
+    $fk_paquete = $_GET['fk_paquete'];
+    $stmt = $conn->prepare("SELECT * FROM paquete_servicio WHERE fk_paquete = :fk_paquete");
+    $stmt->bindParam(':fk_paquete', $fk_paquete);
+    $stmt->execute();
 
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $row = $resultado[0] ?? null;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,7 +19,7 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Prin. Pago</title>
+    <title>Tabla Prin. Paquete - Servicio</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -374,122 +378,30 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Filter Menu -->
-                    <form action="filtrar_pago.php" method="POST" autocomplete="off" class="filtro-container">
-                        
-                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
-                        <i class="fas fa-filter"></i>
-                        </button>
-
-                        <div id="panelFiltro" class="panel-filtro">
-
-                            <label for="id_pago_filter">ID Pago:</label>
-                            <input type="number" name="id_pago_filter" id="id_pago_filter" placeholder="Busqueda por ID de Pago">
-
-                            <label for="fk_paquete">FK Paquete:</label>
-                            <input type="number" name="fk_paquete" id="fk_paquete" placeholder="Busqueda por FK paquete">
-
-                            <label for="fk_cotizacion">FK Cotización:</label>
-                            <input type="number" name="fk_cotizacion" id="fk_cotizacion" placeholder="Busqueda por FK cotización">
-
-                            <label for="fk_cliente">FK Cliente:</label>
-                            <input type="number" name="fk_cliente" id="fk_cliente" placeholder="Busqueda por FK Cliente">
-
-                            <label for="fk_datos_pago">FK Datos de Pago:</label>
-                            <input type="number" name="fk_datos_pago" id="fk_datos_pago" placeholder="Busqueda por FK Datos Pago">
-
-                            <input type="submit" name="filtrar-pago" value="Filtrar" class="btn-filter" />
-                        </div>
-                    </form>
-                    <!-- End of Filter Menu -->
-
-                    <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: PAGO</h1>
+                        <h1 class="titulo-maintable-dash">Modificar Paquete-Servicio</h1>
                     </div>
 
-                    <!-- Botón flotante -->
-                    <button id="boton-flotante" class="boton-flotante">+</button>
-
-                    <div id="formulario-flotante" class="contenedor-formulario oculto">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                    <div class="contenedor-formulario-dash">
+                        <form action="modificar_paquete_servicio.php" autocomplete="off" method="POST" class="formulario-dash">
                             
                             <label for="fk_paquete">ID del Paquete:</label>
-                            <input type="number" name="fk_paquete" id="fk_paquete" placeholder="Ingresar ID del paquete">
+                            <input type="number" name="fk_paquete" id="fk_paquete" value="<?= $row['fk_paquete']?>" placeholder="ID del Paquete" readonly>
 
-                            <label for="fk_cotizacion">ID de la Cotización:</label>
-                            <input type="number" name="fk_cotizacion" id="fk_cotizacion" placeholder="Ingresar ID de la Cotización">
+                            <label for="fk_servicio">ID del Servicio:</label>
+                            <input type="number" name="fk_servicio" id="fk_servicio" value="<?= $row['fk_servicio']?>" placeholder="ID del Servicio">
 
                             <label for="fk_cliente">ID del Cliente:</label>
-                            <input type="number" name="fk_cliente" id="fk_cliente" placeholder="Ingresar ID del Cliente">
-
-                            <label for="fk_datos_pago">ID de Datos de Pago:</label>
-                            <input type="number" name="fk_datos_pago" id="fk_datos_pago" placeholder="Ingresar ID de Datos de Pago">
+                            <input type="number" name="fk_cliente" id="fk_cliente" value="<?= $row['fk_cliente']?>" placeholder="ID del Cliente"> 
                             
-                            <input type="submit" name="agregar-pago" class="btn btn-sm btn-success" value="Ingresar Paquete">
+                            <input type="submit" name="modificar-paquete-servicio" class="btn btn-sm btn-success" value="Modificar Paquete-Servicio">
+                            <input type="submit" name="cancelar" class="btn btn-sm btn-danger" value="Cancelar">
                         </form>
                     </div>
-                    <!-- End of Page Heading -->
 
-                    <!-- Table Content-Operations -->
-                    <div>
-                        <h3 class="titulo-table-dash">Lista de Pago</h3>
-                        <table class="table-dashboard">
-                            <thead>
-                                <tr>
-                                    <th>ID Pago</th>
-                                    <th>FK Paquete</th>
-                                    <th>FK Cotización</th>
-                                    <th>FK Cliente</th>
-                                    <th>FK Datos de Pago</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_pago']?></td>
-                                <td><?= $row['fk_paquete']?></td>
-                                <td><?= $row['fk_cotizacion']?></td>
-                                <td><?= $row['fk_cliente']?></td>
-                                <td><?= $row['fk_datos_pago']?></td>
-                                
-                                <th><form action=""><a name="modificar-pago" class="btn btn-sm btn-primary shadow-sm" href="update_pago.php?id_pago=<?= $row['id_pago']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_pago'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_pago'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_pago'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el dato de pago <strong><?= $row['id_pago'] ?></strong>. Esta operación no se puede deshacer.
-                                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_pago.php?id_pago=<?= $row['id_pago'] ?>" class="btn btn-danger">Eliminar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--End of Table Content-Operations -->
-                
                 </div>
                 <!-- /.container-fluid -->
+
 
             </div>
             <!-- End of Main Content -->

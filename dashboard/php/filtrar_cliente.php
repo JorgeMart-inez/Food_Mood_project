@@ -20,8 +20,7 @@ if (!empty($nombre_cliente_filter)) {
     $query .= " AND nombre LIKE :nombre_cliente_filter";
 }
 if (!empty($apellido_cliente_filter)) {
-    $query .= " AND apellido LIKE
-     :apellido_cliente_filter";
+    $query .= " AND apellido LIKE :apellido_cliente_filter";
 }
 if (!empty($telefono_cliente_filter)) {
     $query .= " AND telefono = :telefono_cliente_filter";

@@ -28,7 +28,7 @@ if (isset($_POST['cotizar-p1'])) {
         $postre    = null;
         $bebida    = !empty($_POST['bebida']);
         $metodo    = !empty($_POST['metodo_pago']); 
-        $paquete   = 'PAQUETE SENCILLO'; 
+        $paquete   = 'Paquete Sencillo'; 
         $invitados = 50;
         $costo_servicios = $libreria_aux->calc_costo_servicios($servicios);
         $costo_total     = $costo_servicios + ($invitados * 650);
@@ -185,7 +185,7 @@ else if (isset($_POST['cotizar-p2']))
         $postre    = null;
         $bebida    = !empty($_POST['bebida']);
         $metodo    = !empty($_POST['metodo_pago']); 
-        $paquete   = 'PAQUETE FIESTA';
+        $paquete   = 'Paquete Fiesta';
         $invitados = 100;
         $costo_servicios = $libreria_aux->calc_costo_servicios($servicios);
         $costo_total     = $costo_servicios + ($invitados * 650);
@@ -343,7 +343,7 @@ else if (isset($_POST['cotizar-p3']))
         $postre    = !empty($_POST['postre']);
         $bebida    = !empty($_POST['bebida']);
         $metodo    = !empty($_POST['metodo_pago']); 
-        $paquete   = 'PAQUETE EVENTO';
+        $paquete   = 'Paquete Evento';
         $invitados = 200;
         $costo_servicios = $libreria_aux->calc_costo_servicios($servicios);
         $costo_total     = $costo_servicios + ($invitados * 650);
@@ -507,7 +507,7 @@ else if (isset($_POST['cotizar-p4']))
         $postre    = !empty($_POST['postre']);
         $bebida    = !empty($_POST['bebida']);
         $metodo    = !empty($_POST['metodo_pago']); 
-        $paquete   = 'PAQUETE EVENTO';
+        $paquete   = 'Paquete Personalizado';
         $invitados = ($_POST['invitados']);
         $costo_servicios = $libreria_aux->calc_costo_servicios($servicios);
         $costo_total     = $costo_servicios + ($invitados * 650);

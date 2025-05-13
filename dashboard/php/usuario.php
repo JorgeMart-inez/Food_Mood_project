@@ -382,13 +382,13 @@ $stmt->execute();
 
                         <div id="panelFiltro" class="panel-filtro">
                             <label>ID Usuario:</label>
-                            <input type="number" name="id_usuario" placeholder="Buscar por ID" />
+                            <input type="number" name="id_usuario_filter" placeholder="Buscar por ID" />
 
                             <label>Correo:</label>
-                            <input type="email" name="correo_usuario" placeholder="Buscar por Correo" />
+                            <input type="email" name="correo_usuario_filter" placeholder="Buscar por Correo" />
 
                             <label>Rol:</label>
-                            <select name="rol_usuario">
+                            <select name="rol_usuario_filter">
                                 <option value="">Todos</option>
                                 <option value="usuario">Usuario</option>
                                 <option value="admin">Administrador</option>

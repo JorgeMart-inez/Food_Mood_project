@@ -20,6 +20,6 @@ else if(!empty($_POST['cancelar']))
 }
 else
 {
-    echo "Error: No se pudo modificar el metodo_pago.";
+    echo "Error: No se pudo modificar el metodo de pago.";
 }
 ?>

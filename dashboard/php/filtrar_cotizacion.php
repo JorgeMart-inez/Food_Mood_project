@@ -1,10 +1,59 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM pago");
+// Inicializa los filtros
+$id_cotizacion_filter  = isset($_POST['id_cotizacion_filter']) ? $_POST['id_cotizacion_filter'] : '';
+$fk_paquete_filter     = isset($_POST['fk_paquete_filter'])    ? $_POST['fk_paquete_filter']    : '';
+$fk_cliente_filter     = isset($_POST['fk_cliente_filter'])    ? $_POST['fk_cliente_filter']    : '';
+$fk_evento_filter      = isset($_POST['fk_evento_filter'])     ? $_POST['fk_evento_filter']     : '';
+$total_filter          = isset($_POST['total_filter'])         ? $_POST['total_filter']         : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM cotizacion WHERE 1=1";
+
+if (!empty($id_cotizacion_filter)) {
+    $query .= " AND id_cotizacion = :id_cotizacion_filter";
+}
+if (!empty($fk_paquete_filter)){
+    $query .= " AND fk_paquete = :fk_paquete_filter";
+}
+if (!empty($fk_cliente_filter)){
+    $query .= " AND fk_cliente = :fk_cliente_filter";
+}
+if (!empty($fk_evento_filter)){
+    $query .= " AND fk_evento = :fk_evento_filter";
+}
+if (!empty($total_filter)){
+    $query .= " AND total = :total_filter";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_cotizacion_filter)) {
+    $stmt->bindParam(':id_cotizacion_filter', $id_cotizacion_filter, PDO::PARAM_INT);
+}
+if (!empty($fk_paquete_filter)) {
+    $stmt->bindParam(':fk_paquete_filter', $fk_paquete_filter, PDO::PARAM_INT);
+}
+if (!empty($fk_cliente_filter)) {
+    $stmt->bindParam(':fk_cliente_filter', $fk_cliente_filter, PDO::PARAM_INT);
+}
+if (!empty($fk_evento_filter)) {
+    $stmt->bindParam(':fk_evento_filter', $fk_evento_filter, PDO::PARAM_INT);
+}
+if (!empty($total_filter)) {
+    $stmt->bindParam(':total_filter', $total_filter, PDO::PARAM_INT);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +64,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Prin. Pago</title>
+    <title>Tabla Prin. Cotizacion</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -375,7 +423,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_pago.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar_cotizacion.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -383,29 +431,29 @@ $stmt->execute();
 
                         <div id="panelFiltro" class="panel-filtro">
 
-                            <label for="id_pago_filter">ID Pago:</label>
-                            <input type="number" name="id_pago_filter" id="id_pago_filter" placeholder="Busqueda por ID de Pago">
+                            <label for="id_cotizacion_filter">ID Cotizacion:</label>
+                            <input type="number" name="id_cotizacion_filter" id="id_cotizacion_filter" placeholder="Busqueda por ID de Cotización">
 
-                            <label for="fk_paquete">FK Paquete:</label>
-                            <input type="number" name="fk_paquete" id="fk_paquete" placeholder="Busqueda por FK paquete">
+                            <label for="fk_paquete_filter">FK Paquete:</label>
+                            <input type="number" name="fk_paquete_filter" id="fk_paquete_filter" placeholder="Busqueda por FK paquete">
 
-                            <label for="fk_cotizacion">FK Cotización:</label>
-                            <input type="number" name="fk_cotizacion" id="fk_cotizacion" placeholder="Busqueda por FK cotización">
+                            <label for="fk_cliente_filter">FK Cliente:</label>
+                            <input type="number" name="fk_cliente_filter" id="fk_cliente_filter" placeholder="Busqueda por FK Cliente">
 
-                            <label for="fk_cliente">FK Cliente:</label>
-                            <input type="number" name="fk_cliente" id="fk_cliente" placeholder="Busqueda por FK Cliente">
+                            <label for="fk_evento_filter">FK Evento:</label>
+                            <input type="number" name="fk_evento_filter" id="fk_evento_filter" placeholder="Busqueda por FK Evento">
 
-                            <label for="fk_datos_pago">FK Datos de Pago:</label>
-                            <input type="number" name="fk_datos_pago" id="fk_datos_pago" placeholder="Busqueda por FK Datos Pago">
+                            <label for="total_filter">Total:</label>
+                            <input type="number" name="total_filter" id="total_filter" placeholder="Busqueda por Total">
 
-                            <input type="submit" name="filtrar-pago" value="Filtrar" class="btn-filter" />
+                            <input type="submit" name="filtrar-cotizacion" value="Filtrar" class="btn-filter" />
                         </div>
                     </form>
                     <!-- End of Filter Menu -->
 
                     <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: PAGO</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: COTIZACIÓN</h1>
                     </div>
 
                     <!-- Botón flotante -->
@@ -417,72 +465,76 @@ $stmt->execute();
                             <label for="fk_paquete">ID del Paquete:</label>
                             <input type="number" name="fk_paquete" id="fk_paquete" placeholder="Ingresar ID del paquete">
 
-                            <label for="fk_cotizacion">ID de la Cotización:</label>
-                            <input type="number" name="fk_cotizacion" id="fk_cotizacion" placeholder="Ingresar ID de la Cotización">
-
                             <label for="fk_cliente">ID del Cliente:</label>
                             <input type="number" name="fk_cliente" id="fk_cliente" placeholder="Ingresar ID del Cliente">
 
-                            <label for="fk_datos_pago">ID de Datos de Pago:</label>
-                            <input type="number" name="fk_datos_pago" id="fk_datos_pago" placeholder="Ingresar ID de Datos de Pago">
+                            <label for="fk_evento">ID del Evento:</label>
+                            <input type="number" name="fk_evento" id="fk_evento" placeholder="Ingresar ID de Datos de Pago">
                             
-                            <input type="submit" name="agregar-pago" class="btn btn-sm btn-success" value="Ingresar Paquete">
+                            <label for="total">Total:</label>
+                            <input type="number" name="total" id="total" placeholder="Ingrese el total de la cotización">
+
+                            <input type="submit" name="agregar-cotizacion" class="btn btn-sm btn-success" value="Ingresar Paquete">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
 
+
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Pago</h3>
+                        <h3 class="titulo-table-dash">Lista de Cotizaciones</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Pago</th>
+                                    <th>ID Cotización</th>
                                     <th>FK Paquete</th>
-                                    <th>FK Cotización</th>
                                     <th>FK Cliente</th>
-                                    <th>FK Datos de Pago</th>
+                                    <th>FK Evento</th>
+                                    <th>Total</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <td><?= $row['id_pago']?></td>
-                                <td><?= $row['fk_paquete']?></td>
-                                <td><?= $row['fk_cotizacion']?></td>
-                                <td><?= $row['fk_cliente']?></td>
-                                <td><?= $row['fk_datos_pago']?></td>
-                                
-                                <th><form action=""><a name="modificar-pago" class="btn btn-sm btn-primary shadow-sm" href="update_pago.php?id_pago=<?= $row['id_pago']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_pago'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_pago'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_pago'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el dato de pago <strong><?= $row['id_pago'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_cotizacion']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_paquete']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_cliente']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['total']) ?></td>
+                                            <th><form action=""><a name="modificar-cotizacion" class="btn btn-sm btn-primary shadow-sm" href="update_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_cotizacion'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_cotizacion'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_cotizacion'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_cotizacion'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará la cotizacion: <strong><?= $row['id_cotizacion']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="delete_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_pago.php?id_pago=<?= $row['id_pago'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>

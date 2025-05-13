@@ -1,3 +1,10 @@
+<?php
+include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
+
+$stmt = $conn->prepare("SELECT * FROM paquete");
+$stmt->execute();
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +15,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Paquete</title>
+    <title>Tabla Prin. Paquete</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +28,8 @@
         
     <!-- Custom styles for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/css/sb-admin-2.min.css" rel="stylesheet">
-
+    <link href="http://localhost/F&M_version1.7.1/dashboard/css/sb-admin-dash.css" rel="stylesheet">
+    
 </head>
 
 <body id="page-top">
@@ -362,6 +374,150 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Filter Menu -->
+                    <form action="filtrar_paquete.php" method="POST" autocomplete="off" class="filtro-container">
+                        
+                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                        </button>
+
+                        <div id="panelFiltro" class="panel-filtro">
+
+                            <label for="id_paquete_filter">ID de Paquete:</label>
+                            <input type="number" name="id_paquete_filter" id="id_paquete_filter" placeholder="Busqueda por ID:">
+
+                            <label for="nombre_paquete_filter">Busqueda por Nombre:</label>
+                            <select name="nombre_paquete_filter" id="nombre_paquete">
+                                <option value="">Seleccione un nombre</option>  
+                                <option value="Paquete Sencillo">Paquete Sencillo</option>
+                                <option value="Paquete Fiesta">Paquete Fiesta</option>
+                                <option value="Paquete Evento">Paquete Evento</option>
+                                <option value="Paquete Personalizado">Paquete Personalizado</option>
+                            </select>
+
+                            <label for="anfitrion_paquete_filter">Nombre del Anfitrión:</label>
+                            <input type="text" name="anfitrion_paquete_filter" id="anfitrion_paquete_filter" placeholder="Busqueda por anfitrión:">
+                            
+                            <input type="submit" name="filtrar-paquete" value="Filtrar" class="btn-filter" />
+                        </div>
+                    </form>
+                    <!-- End of Filter Menu -->
+
+                    <!-- Page Heading -->
+                    <div class="titulo-table-dash-container">
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: PAQUETE</h1>
+                    </div>
+
+                    <!-- Botón flotante -->
+                    <button id="boton-flotante" class="boton-flotante">+</button>
+
+                    <div id="formulario-flotante" class="contenedor-formulario oculto">
+                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+
+                            <label for="nombre_paquete">Nombre:</label>
+                            <select name="nombre_paquete" id="nombre_paquete">
+                                <option value="">Seleccione un nombre</option>  
+                                <option value="Paquete Sencillo">Paquete Sencillo</option>
+                                <option value="Paquete Fiesta">Paquete Fiesta</option>
+                                <option value="Paquete Evento">Paquete Evento</option>
+                                <option value="Paquete Personalizado">Paquete Personalizado</option>
+                            </select>
+
+                            <label for="anfitrion">Anfitrión:</label>
+                            <input type="text" name="anfitrion" id="anfitrion" placeholder="Nombre del Anfitrión">
+
+                            <label for="fk_evento">FK Evento</label>
+                            <input type="number" name="fk_evento" id="fk_evento" placeholder="ID Foráneo del Evento">
+
+                            <label for="fk_aperitivo">FK Aperitivo</label>
+                            <input type="number" name="fk_aperitivo" id="fk_aperitivo" placeholder="ID Foráneo del Aperitivo">
+
+                            <label for="fk_entrada">FK Entrada</label>
+                            <input type="number" name="fk_entrada" id="fk_entrada" placeholder="ID Foráneo de la Entrada">
+
+                            <label for="fk_plato_fuerte">FK Plato Fuerte</label>
+                            <input type="number" name="fk_plato_fuerte" id="fk_plato_fuerte" placeholder="ID Foráneo del Plato Fuerte">
+
+                            <label for="fk_postre">FK Postre</label>
+                            <input type="number" name="fk_postre" id="fk_postre" placeholder="ID Foráneo del Postre">
+
+                            <label for="fk_bebida">FK Bebida</label>
+                            <input type="number" name="fk_bebida" id="fk_bebida" placeholder="ID Foráneo de la Bebida">
+                            
+                            <label for="fk_metodo_pago">FK Método de Pago</label>
+                            <input type="number" name="fk_metodo_pago" id="fk_metodo_pago" placeholder="ID Foráneo de Método de Pago">
+
+                            <input type="submit" name="agregar-paquete" class="btn btn-sm btn-success" value="Ingresar Paquete">
+                        </form>
+                    </div>
+                    <!-- End of Page Heading -->
+
+                    <!-- Table Content-Operations -->
+                    <div>
+                        <h3 class="titulo-table-dash">Lista de Paquetes</h3>
+                        <table class="table-dashboard">
+                            <thead>
+                                <tr>
+                                    <th>ID Paquete</th>
+                                    <th>Nombre Paquete</th>
+                                    <th>Anfitrión</th>
+                                    <th>FK Evento</th>
+                                    <th>FK Aperitivo</th>
+                                    <th>FK Entrada</th>
+                                    <th>FK Plato Fuerte</th>
+                                    <th>FK Postre</th>
+                                    <th>FK Bebida</th>
+                                    <th>FK Método Pago</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
+                                ?>
+                                <tr>
+                                <td><?= $row['id_paquete']?></td>
+                                <td><?= $row['nombre_paquete']?></td>
+                                <td><?= $row['anfitrion']?></td>
+                                <td><?= $row['fk_evento']?></td>
+                                <td><?= $row['fk_aperitivo']?></td>
+                                <td><?= $row['fk_entrada']?></td>
+                                <td><?= $row['fk_plato_fuerte']?></td>
+                                <td><?= $row['fk_postre']?></td>
+                                <td><?= $row['fk_bebida']?></td>
+                                <td><?= $row['fk_metodo_pago']?></td>
+                                
+                                <th><form action=""><a name="modificar-paquete" class="btn btn-sm btn-primary shadow-sm" href="update_paquete.php?id_paquete=<?= $row['id_paquete']?>">Modificar</a></form></th>
+                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_paquete'] ?>">
+                                        Eliminar
+                                    </button>
+                                    <div class="modal fade" id="modalEliminar<?= $row['id_paquete'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_paquete'] ?>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_paquete'] ?>">¿Estás seguro?</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                </div>
+                                                    <div class="modal-body">
+                                                        Esta acción eliminará el paquete <strong><?= $row['nombre_paquete'] ?></strong>. Esta operación no se puede deshacer.
+                                                    </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <a href="delete_paquete.php?id_paquete=<?= $row['id_paquete'] ?>" class="btn btn-danger">Eliminar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                                </tr>
+                                <?php 
+                                endwhile;
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--End of Table Content-Operations -->
                 
                 </div>
                 <!-- /.container-fluid -->
@@ -426,6 +582,12 @@
     <!-- Page level custom scripts -->
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-pie-demo.js"></script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for the filter btn and insert btn -->
+    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

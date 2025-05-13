@@ -2,35 +2,35 @@
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
 // Inicializa los filtros
-$id_usuario     = isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
-$correo_usuario = isset($_POST['correo_usuario']) ? $_POST['correo_usuario'] : '';
-$rol_usuario    = isset($_POST['rol_usuario']) ? $_POST['rol_usuario'] : '';
+$id_usuario_filter     = isset($_POST['id_usuario_filter'])     ? $_POST['id_usuario_filter']     : '';
+$correo_usuario_filter = isset($_POST['correo_usuario_filter']) ? $_POST['correo_usuario_filter'] : '';
+$rol_usuario_filter    = isset($_POST['rol_usuario_filter'])    ? $_POST['rol_usuario_filter']    : '';
 
 // Construye la consulta SQL con filtros
 $query = "SELECT * FROM usuario WHERE 1=1";
 
-if (!empty($id_usuario)) {
-    $query .= " AND id_usuario = :id_usuario";
+if (!empty($id_usuario_filter)) {
+    $query .= " AND id_usuario = :id_usuario_filter";
 }
-if (!empty($correo_usuario)) {
-    $query .= " AND correo LIKE :correo_usuario";
+if (!empty($correo_usuario_filter)) {
+    $query .= " AND correo LIKE :correo_usuario_filter";
 }
-if (!empty($rol_usuario)) {
-    $query .= " AND rol = :rol_usuario";
+if (!empty($rol_usuario_filter)) {
+    $query .= " AND rol = :rol_usuario_filter";
 }
 
 $stmt = $conn->prepare($query);
 
 // Asigna los valores a los parámetros
-if (!empty($id_usuario)) {
-    $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+if (!empty($id_usuario_filter)) {
+    $stmt->bindParam(':id_usuario_filter', $id_usuario_filter, PDO::PARAM_INT);
 }
-if (!empty($correo_usuario)) {
-    $correo_usuario = "%$correo_usuario%";
-    $stmt->bindParam(':correo_usuario', $correo_usuario, PDO::PARAM_STR);
+if (!empty($correo_usuario_filter)) {
+    $correo_usuario_filter = "%$correo_usuario_filter%";
+    $stmt->bindParam(':correo_usuario_filter', $correo_usuario_filter, PDO::PARAM_STR);
 }
-if (!empty($rol_usuario)) {
-    $stmt->bindParam(':rol_usuario', $rol_usuario, PDO::PARAM_STR);
+if (!empty($rol_usuario_filter)) {
+    $stmt->bindParam(':rol_usuario_filter', $rol_usuario_filter, PDO::PARAM_STR);
 }
 
 // Ejecuta la consulta
@@ -417,13 +417,13 @@ $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         <div id="panelFiltro" class="panel-filtro">
                         <label>ID Usuario:</label>
-                        <input type="number" name="id_usuario" placeholder="Buscar por ID" />
+                        <input type="number" name="id_usuario_filter" placeholder="Buscar por ID" />
 
                         <label>Correo:</label>
-                        <input type="email" name="correo_usuario" placeholder="Buscar por Correo" />
+                        <input type="email" name="correo_usuario_filter" placeholder="Buscar por Correo" />
 
                         <label>Rol:</label>
-                        <select name="rol_usuario">
+                        <select name="rol_usuario_filter">
                             <option value="">Todos</option>
                             <option value="usuario">Usuario</option>
                             <option value="admin">Administrador</option>
