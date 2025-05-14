@@ -375,7 +375,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_evento.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar/filtrar_evento.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -469,7 +469,7 @@ $stmt->execute();
                                 <td><?= $row['cantidad_invitados']?></td>
                                 <td><?= $row['tipo_evento']?></td>
                                 
-                                <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-evento" class="btn btn-sm btn-primary shadow-sm" href="update/update_evento.php?id_evento=<?= $row['id_evento']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_evento'] ?>">
                                         Eliminar
                                     </button>
@@ -485,7 +485,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_evento.php?id_evento=<?= $row['id_evento'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

@@ -375,7 +375,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_paquete_servicio.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar/filtrar_paquete_servicio.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -444,7 +444,7 @@ $stmt->execute();
                                 <td><?= $row['fk_servicio']?></td>
                                 <td><?= $row['fk_cliente']?></td>
                                 
-                                <th><form action=""><a name="modificar-paquete-servicio" class="btn btn-sm btn-primary shadow-sm" href="update_paquete_servicio.php?fk_paquete=<?= $row['fk_paquete']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-paquete-servicio" class="btn btn-sm btn-primary shadow-sm" href="update/update_paquete_servicio.php?fk_paquete=<?= $row['fk_paquete']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['fk_paquete'] ?>">
                                         Eliminar
                                     </button>
@@ -460,7 +460,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_paquete_servicio.php?fk_paquete=<?= $row['fk_paquete'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_paquete_servicio.php?fk_paquete=<?= $row['fk_paquete'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

@@ -406,7 +406,7 @@ $stmt->execute();
                                 <th><?= $row['id_plato_fuerte']?></th>
                                 <th><?= $row['nombre_plato_fuerte']?></th>
 
-                                <th><form action=""><a name="modificar-plato-fuerte" class="btn btn-sm btn-primary shadow-sm" href="update_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-plato-fuerte" class="btn btn-sm btn-primary shadow-sm" href="update/update_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_plato_fuerte'] ?>">
                                         Eliminar
                                     </button>
@@ -422,7 +422,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_plato_fuerte.php?id_plato_fuerte=<?= $row['id_plato_fuerte'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

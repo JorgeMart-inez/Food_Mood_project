@@ -1,10 +1,67 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM aperitivos ");
+// Inicializa los filtros
+$id_cliente_filter       = isset($_POST['id_cliente_filter'])       ? $_POST['id_cliente_filter']       : '';
+$nombre_cliente_filter   = isset($_POST['nombre_cliente_filter'])   ? $_POST['nombre_cliente_filter']   : '';
+$apellido_cliente_filter = isset($_POST['apellido_cliente_filter']) ? $_POST['apellido_cliente_filter'] : '';
+$telefono_cliente_filter = isset($_POST['telefono_cliente_filter']) ? $_POST['telefono_cliente_filter'] : '';
+$estado_cliente_filter   = isset($_POST['estado_cliente_filter'])   ? $_POST['estado_cliente_filter']   : '';
+$fk_usuario_filter       = isset($_POST['fk_usuario_filter'])       ? $_POST['fk_usuario_filter']       : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM cliente WHERE 1=1";
+
+if (!empty($id_cliente_filter)) {
+    $query .= " AND id_cliente = :id_cliente_filter";
+}
+if (!empty($nombre_cliente_filter)) {
+    $query .= " AND nombre LIKE :nombre_cliente_filter";
+}
+if (!empty($apellido_cliente_filter)) {
+    $query .= " AND apellido LIKE :apellido_cliente_filter";
+}
+if (!empty($telefono_cliente_filter)) {
+    $query .= " AND telefono = :telefono_cliente_filter";
+}
+if (!empty($estado_cliente_filter)) {
+    $query .= " AND estado = :estado_cliente_filter";
+}
+if (!empty($fk_usuario_filter)) {
+    $query .= " AND fk_usuario = :fk_usuario_filter";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_cliente_filter)) {
+    $stmt->bindParam(':id_cliente_filter', $id_cliente_filter, PDO::PARAM_INT);
+}
+if (!empty($nombre_cliente_filter)) {
+    $stmt->bindValue(':nombre_cliente_filter', '%' . $nombre_cliente_filter . '%', PDO::PARAM_STR);
+}
+if (!empty($apellido_cliente_filter)) {
+    $stmt->bindValue(':apellido_cliente_filter', '%' . $apellido_cliente_filter . '%', PDO::PARAM_STR);
+}
+if (!empty($telefono_cliente_filter)) {
+    $stmt->bindParam(':telefono_cliente_filter', $telefono_cliente_filter, PDO::PARAM_STR);
+}
+if (!empty($estado_cliente_filter)) {
+    $stmt->bindParam(':estado_cliente_filter', $estado_cliente_filter, PDO::PARAM_STR);
+}
+if (!empty($fk_usuario_filter)) {
+    $stmt->bindParam(':fk_usuario_filter', $fk_usuario_filter, PDO::PARAM_INT);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +72,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Aperitivo</title>
+    <title>Tabla Prin. Usuario</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -66,7 +122,7 @@ $stmt->execute();
                 Interface
             </div>
 
-            <!-- Nav Item - Tablas Principales Collapse Menu-->
+             <!-- Nav Item - Tablas Principales Collapse Menu-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -76,14 +132,14 @@ $stmt->execute();
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades fuertes:</h6>
-                        <a class="collapse-item" href="usuario.php">Usuario</a>
-                        <a class="collapse-item" href="cliente.php">Cliente</a>
-                        <a class="collapse-item" href="evento.php">Evento</a>
-                        <a class="collapse-item" href="paquete.php">Paquete</a>
-                        <a class="collapse-item" href="paquete_servicio.php">paquete_servicio</a>
-                        <a class="collapse-item" href="datos_pago.php">Datos de Pago</a>
-                        <a class="collapse-item" href="pago.php">Pago</a>
-                        <a class="collapse-item" href="cotizacion.php">Cotización</a>
+                        <a class="collapse-item" href="../usuario.php">Usuario</a>
+                        <a class="collapse-item" href="../cliente.php">Cliente</a>
+                        <a class="collapse-item" href="../evento.php">Evento</a>
+                        <a class="collapse-item" href="../paquete.php">Paquete</a>
+                        <a class="collapse-item" href="../paquete_servicio.php">paquete_servicio</a>
+                        <a class="collapse-item" href="../datos_pago.php">Datos de Pago</a>
+                        <a class="collapse-item" href="../pago.php">Pago</a>
+                        <a class="collapse-item" href="../cotizacion.php">Cotización</a>
                     </div>
                 </div>
             </li>
@@ -98,13 +154,13 @@ $stmt->execute();
                 <div id="collapseAux" class="collapse" aria-labelledby="headingAux" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades:</h6>
-                        <a class="collapse-item" href="aperitivo.php">Aperitivo</a>
-                        <a class="collapse-item" href="entrada.php">Entrada</a>
-                        <a class="collapse-item" href="plato_fuerte.php">Plato Fuerte</a>
-                        <a class="collapse-item" href="postre.php">Postre</a>
-                        <a class="collapse-item" href="bebida.php">Bebidas</a>
-                        <a class="collapse-item" href="servicios.php">Servicios</a>
-                        <a class="collapse-item" href="metodo_pago.php">Método de Pago</a>
+                        <a class="collapse-item" href="../aperitivo.php">Aperitivo</a>
+                        <a class="collapse-item" href="../entrada.php">Entrada</a>
+                        <a class="collapse-item" href="../plato_fuerte.php">Plato Fuerte</a>
+                        <a class="collapse-item" href="../postre.php">Postre</a>
+                        <a class="collapse-item" href="../bebida.php">Bebidas</a>
+                        <a class="collapse-item" href="../servicios.php">Servicios</a>
+                        <a class="collapse-item" href="../metodo_pago.php">Método de Pago</a>
                     </div>
                 </div>
             </li>
@@ -374,65 +430,195 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Filter Menu -->
+                    <form action="filtrar_cliente.php" method="POST" autocomplete="off" class="filtro-container">
+                        
+                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                        </button>
+
+                        <div id="panelFiltro" class="panel-filtro">
+
+                            <label for="id_cliente_filter">ID Cliente:</label>
+                            <input type="number" name="id_cliente_filter" id="id_cliente_filter" placeholder="Buscar por ID" />
+
+                            <label for="nombre_cliente_filter">Nombre Cliente:</label>
+                            <input type="text" name="nombre_cliente_filter" id="nombre_cliente_filter" placeholder="Buscar por Nombre" />
+
+                            <label for="apellido_cliente_filter">Apellido Cliente:</label>
+                            <input type="text" name="apellido_cliente_filter" id="apellido_cliente_filter" placeholder="Buscar por Apellido" />
+
+                            <label for="telefono_cliente_filter">Teléfono Cliente:</label>
+                            <input type="tel" name="telefono_cliente_filter" id="telefono_cliente_filter" minlength="10" maxlength="10" placeholder="Buscar por Teléfono" />
+
+                            <label for="estado_cliente_filter">Estado en el que radica:</label>
+                            <select name="estado_cliente_filter" id="estado_cliente_filter">
+                                <option value="" disabled selected>Seleccione su estado</option>
+                                <option value="Aguascalientes">Aguascalientes</option>
+                                <option value="Baja California">Baja California</option>
+                                <option value="Baja California Sur">Baja California Sur</option>
+                                <option value="Campeche">Campeche</option>
+                                <option value="Chiapas">Chiapas</option>
+                                <option value="Chihuahua">Chihuahua</option>
+                                <option value="Coahuila">Coahuila</option>
+                                <option value="Colima">Colima</option>
+                                <option value="Ciudad de México">Ciudad de México</option>
+                                <option value="Durango">Durango</option>
+                                <option value="Estado de México">Estado de México</option>
+                                <option value="Guanajuato">Guanajuato</option>
+                                <option value="Guerrero">Guerrero</option>
+                                <option value="Hidalgo">Hidalgo</option>
+                                <option value="Jalisco">Jalisco</option>
+                                <option value="Michoacán">Michoacán</option>
+                                <option value="Morelos">Morelos</option>
+                                <option value="Nayarit">Nayarit</option>
+                                <option value="Nuevo León">Nuevo León</option>
+                                <option value="Oaxaca">Oaxaca</option>
+                                <option value="Puebla">Puebla</option>
+                                <option value="Querétaro">Querétaro</option>
+                                <option value="Quintana Roo">Quintana Roo</option>
+                                <option value="San Luis Potosí">San Luis Potosí</option>
+                                <option value="Sinaloa">Sinaloa</option>
+                                <option value="Sonora">Sonora</option>
+                                <option value="Tabasco">Tabasco</option>
+                                <option value="Tamaulipas">Tamaulipas</option>
+                                <option value="Tlaxcala">Tlaxcala</option>
+                                <option value="Veracruz">Veracruz</option>
+                                <option value="Yucatán">Yucatán</option>
+                                <option value="Zacatecas">Zacatecas</option>
+                            </select>
+
+                            <label for="fk_usuario_filter">FK del Usuario: </label>
+                            <input type="number" name="fk_usuario_filter" id="fk_usuario_filter" placeholder="Buscar por FK de Usuario" />
+
+                            <input type="submit" name="filtrar-cliente" value="Filtrar" class="btn-filter" />
+                        </div>
+                    </form>
+                    <!-- End of Filter Menu -->
+
                     <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Aperitivo</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: CLIENTE</h1>
                     </div>
 
-                    <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_aperitivo">Nombre: </label>
-                            <input type="text" name="nombre_aperitivo" id="nombre_aperitivo" placeholder="Nombre del aperitivo">
-                            <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
+                    <!-- Botón flotante -->
+                    <button id="boton-flotante" class="boton-flotante">+</button>
+
+                    <!-- Contenedor del formulario oculto -->
+                    <div id="formulario-flotante" class="contenedor-formulario oculto">
+                        <form action="../insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                            <label for="nombre_cliente">Nombre(s): </label>
+                            <input type="text" name="nombre_cliente" id="nombre_cliente" placeholder="Nombre del Cliente">
+
+                            <label for="apellido_cliente">Apellido(s): </label> 
+                            <input type="text" name="apellido_cliente" id="apellido_cliente" placeholder="Apellido(s) del Cliente">
+
+                            <label for="telefono_cliente">No. Teléfono: </label>
+                            <input type="text" name="telefono_cliente" id="telefono_cliente" minlength="10" maxlength="10" placeholder="Teléfono del Cliente">
+
+                            <label for="estado_cliente">Estado en el que radica:</label>
+                            <select name="estado_cliente" id="estado_cliente">
+                                <option value="" disabled selected>Seleccione su estado</option>
+                                <option value="Aguascalientes">Aguascalientes</option>
+                                <option value="Baja California">Baja California</option>
+                                <option value="Baja California Sur">Baja California Sur</option>
+                                <option value="Campeche">Campeche</option>
+                                <option value="Chiapas">Chiapas</option>
+                                <option value="Chihuahua">Chihuahua</option>
+                                <option value="Coahuila">Coahuila</option>
+                                <option value="Colima">Colima</option>
+                                <option value="Ciudad de México">Ciudad de México</option>
+                                <option value="Durango">Durango</option>
+                                <option value="Estado de México">Estado de México</option>
+                                <option value="Guanajuato">Guanajuato</option>
+                                <option value="Guerrero">Guerrero</option>
+                                <option value="Hidalgo">Hidalgo</option>
+                                <option value="Jalisco">Jalisco</option>
+                                <option value="Michoacán">Michoacán</option>
+                                <option value="Morelos">Morelos</option>
+                                <option value="Nayarit">Nayarit</option>
+                                <option value="Nuevo León">Nuevo León</option>
+                                <option value="Oaxaca">Oaxaca</option>
+                                <option value="Puebla">Puebla</option>
+                                <option value="Querétaro">Querétaro</option>
+                                <option value="Quintana Roo">Quintana Roo</option>
+                                <option value="San Luis Potosí">San Luis Potosí</option>
+                                <option value="Sinaloa">Sinaloa</option>
+                                <option value="Sonora">Sonora</option>
+                                <option value="Tabasco">Tabasco</option>
+                                <option value="Tamaulipas">Tamaulipas</option>
+                                <option value="Tlaxcala">Tlaxcala</option>
+                                <option value="Veracruz">Veracruz</option>
+                                <option value="Yucatán">Yucatán</option>
+                                <option value="Zacatecas">Zacatecas</option>
+                            </select>
+
+                            <label for="fk_usuario">ID del Usuario al que pertenece:</label>
+                            <input type="number" name="fk_usuario" id="fk_usuario" placeholder="ID del usuario">
+
+                            <input type="submit" name="agregar-cliente" class="btn btn-sm btn-success" value="Ingresar Cliente">
                         </form>
                     </div>
+
                     <!-- End of Page Heading -->
 
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
+                        <h3 class="titulo-table-dash">Lista de Clientes</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Aperitivo</th>
-                                    <th>Nombre Aperitivo</th>
-
+                                    <th>ID Cliente</th>
+                                    <th>Nombre(s)</th>
+                                    <th>Apellido(s)</th>
+                                    <th>Teléfono</th>
+                                    <th>Estado</th>
+                                    <th>FK Usuario</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_aperitivo']?></th>
-                                <th><?= $row['nombre_aperitivo']?></th>
-
-                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update/update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_aperitivo'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_aperitivo'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_aperitivo'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el aperitivo <strong><?= $row['nombre_aperitivo'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_cliente']) ?></td>
+                                            <td><?= htmlspecialchars($row['nombre']) ?></td>
+                                            <td><?= htmlspecialchars($row['apellido']) ?></td>
+                                            <td><?= htmlspecialchars($row['telefono']) ?></td>
+                                            <td><?= htmlspecialchars($row['estado']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_usuario']) ?></td>
+                                            <th><form action=""><a name="modificar-cliente" class="btn btn-sm btn-primary shadow-sm" href="../update/update_cliente.php?id_cliente=<?= $row['id_cliente']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_cliente'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_cliente'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_cliente'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_cliente'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el cliente <strong><?= $row['nombre'] . " " . $row['apellido']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="../delete/delete_cliente.php?id_cliente=<?= $row['id_cliente'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete/delete_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -504,6 +690,9 @@ $stmt->execute();
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for the filter btn and insert btn -->
+    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

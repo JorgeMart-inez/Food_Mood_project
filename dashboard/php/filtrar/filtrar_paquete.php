@@ -1,10 +1,47 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM aperitivos ");
+// Inicializa los filtros
+$id_paquete_filter     = isset($_POST['id_paquete_filter'])     ? $_POST['id_paquete_filter']     : '';
+$nombre_paquete_filter = isset($_POST['nombre_paquete_filter']) ? $_POST['nombre_paquete_filter'] : '';
+$anfitrion_filter      = isset($_POST['anfitrion_filter'])      ? $_POST['anfitrion_filter']      : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM paquete WHERE 1=1";
+
+if (!empty($id_paquete_filter)) {
+    $query .= " AND id_paquete = :id_paquete_filter";
+}
+if (!empty($nombre_paquete_filter)){
+    $query .= " AND nombre_paquete LIKE :nombre_paquete_filter";
+    $nombre_paquete_filter = '%' . $nombre_paquete_filter . '%'; 
+}
+if (!empty($anfitrion_filter)){
+    $query .= " AND anfitrion LIKE :anfitrion_filter";
+    $anfitrion_filter = '%' . $anfitrion_filter . '%';
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_paquete_filter)) {
+    $stmt->bindParam(':id_paquete_filter', $id_paquete_filter, PDO::PARAM_INT);
+}
+if (!empty($nombre_paquete_filter)){
+    $stmt->bindParam(':nombre_paquete_filter', $nombre_paquete_filter, PDO::PARAM_STR);
+}
+if (!empty($anfitrion_filter)){
+    $stmt->bindParam(':anfitrion_filter', $anfitrion_filter, PDO::PARAM_STR);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +52,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Aperitivo</title>
+    <title>Tabla Prin. Paquete</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -76,14 +112,14 @@ $stmt->execute();
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades fuertes:</h6>
-                        <a class="collapse-item" href="usuario.php">Usuario</a>
-                        <a class="collapse-item" href="cliente.php">Cliente</a>
-                        <a class="collapse-item" href="evento.php">Evento</a>
-                        <a class="collapse-item" href="paquete.php">Paquete</a>
-                        <a class="collapse-item" href="paquete_servicio.php">paquete_servicio</a>
-                        <a class="collapse-item" href="datos_pago.php">Datos de Pago</a>
-                        <a class="collapse-item" href="pago.php">Pago</a>
-                        <a class="collapse-item" href="cotizacion.php">Cotización</a>
+                        <a class="collapse-item" href="../usuario.php">Usuario</a>
+                        <a class="collapse-item" href="../cliente.php">Cliente</a>
+                        <a class="collapse-item" href="../evento.php">Evento</a>
+                        <a class="collapse-item" href="../paquete.php">Paquete</a>
+                        <a class="collapse-item" href="../paquete_servicio.php">paquete_servicio</a>
+                        <a class="collapse-item" href="../datos_pago.php">Datos de Pago</a>
+                        <a class="collapse-item" href="../pago.php">Pago</a>
+                        <a class="collapse-item" href="../cotizacion.php">Cotización</a>
                     </div>
                 </div>
             </li>
@@ -98,13 +134,13 @@ $stmt->execute();
                 <div id="collapseAux" class="collapse" aria-labelledby="headingAux" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades:</h6>
-                        <a class="collapse-item" href="aperitivo.php">Aperitivo</a>
-                        <a class="collapse-item" href="entrada.php">Entrada</a>
-                        <a class="collapse-item" href="plato_fuerte.php">Plato Fuerte</a>
-                        <a class="collapse-item" href="postre.php">Postre</a>
-                        <a class="collapse-item" href="bebida.php">Bebidas</a>
-                        <a class="collapse-item" href="servicios.php">Servicios</a>
-                        <a class="collapse-item" href="metodo_pago.php">Método de Pago</a>
+                        <a class="collapse-item" href="../aperitivo.php">Aperitivo</a>
+                        <a class="collapse-item" href="../entrada.php">Entrada</a>
+                        <a class="collapse-item" href="../plato_fuerte.php">Plato Fuerte</a>
+                        <a class="collapse-item" href="../postre.php">Postre</a>
+                        <a class="collapse-item" href="../bebida.php">Bebidas</a>
+                        <a class="collapse-item" href="../servicios.php">Servicios</a>
+                        <a class="collapse-item" href="../metodo_pago.php">Método de Pago</a>
                     </div>
                 </div>
             </li>
@@ -374,65 +410,152 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Filter Menu -->
+                    <form action="filtrar_paquete.php" method="POST" autocomplete="off" class="filtro-container">
+                        
+                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                        </button>
+
+                        <div id="panelFiltro" class="panel-filtro">
+
+                            <label for="id_paquete_filter">ID de Paquete:</label>
+                            <input type="number" name="id_paquete_filter" id="id_paquete_filter" placeholder="Busqueda por ID:">
+
+                            <label for="nombre_paquete_filter">Busqueda por Nombre:</label>
+                            <select name="nombre_paquete_filter" id="nombre_paquete">
+                                <option value="">Seleccione un nombre</option>  
+                                <option value="Paquete Sencillo">Paquete Sencillo</option>
+                                <option value="Paquete Fiesta">Paquete Fiesta</option>
+                                <option value="Paquete Evento">Paquete Evento</option>
+                                <option value="Paquete Personalizado">Paquete Personalizado</option>
+                            </select>
+
+                            <label for="anfitrion_paquete_filter">Nombre del Anfitrión:</label>
+                            <input type="text" name="anfitrion_paquete_filter" id="anfitrion_paquete_filter" placeholder="Busqueda por anfitrión:">
+                            
+                            <input type="submit" name="filtrar-paquete" value="Filtrar" class="btn-filter" />
+                        </div>
+                    </form>
+                    <!-- End of Filter Menu -->
+
                     <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Aperitivo</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: PAQUETE</h1>
                     </div>
 
-                    <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_aperitivo">Nombre: </label>
-                            <input type="text" name="nombre_aperitivo" id="nombre_aperitivo" placeholder="Nombre del aperitivo">
-                            <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
+                    <!-- Botón flotante -->
+                    <button id="boton-flotante" class="boton-flotante">+</button>
+
+                    <div id="formulario-flotante" class="contenedor-formulario oculto">
+                        <form action="../insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                            
+                            <label for="id_paquete">ID del Paquete:</label>
+                            <input type="number" name="id_paquete" id="id_paquete" placeholder="ID del Paquete">
+
+                            <label for="nombre_paquete">Nombre:</label>
+                            <select name="nombre_paquete" id="nombre_paquete">
+                                <option value="">Seleccione un nombre</option>  
+                                <option value="Paquete Sencillo">Paquete Sencillo</option>
+                                <option value="Paquete Fiesta">Paquete Fiesta</option>
+                                <option value="Paquete Evento">Paquete Evento</option>
+                                <option value="Paquete Personalizado">Paquete Personalizado</option>
+                            </select>
+
+                            <label for="anfitrion">Anfitrión:</label>
+                            <input type="text" name="anfitrion" id="anfitrion" placeholder="Nombre del Anfitrión">
+
+                            <label for="fk_evento">FK Evento</label>
+                            <input type="number" name="fk_evento" id="fk_evento" placeholder="ID Foráneo del Evento">
+
+                            <label for="fk_aperitivo">FK Aperitivo</label>
+                            <input type="number" name="fk_aperitivo" id="fk_aperitivo" placeholder="ID Foráneo del Aperitivo">
+
+                            <label for="fk_entrada">FK Entrada</label>
+                            <input type="number" name="fk_entrada" id="fk_entrada" placeholder="ID Foráneo de la Entrada">
+
+                            <label for="fk_plato_fuerte">FK Plato Fuerte</label>
+                            <input type="number" name="fk_plato_fuerte" id="fk_plato_fuerte" placeholder="ID Foráneo del Plato Fuerte">
+
+                            <label for="fk_postre">FK Postre</label>
+                            <input type="number" name="fk_postre" id="fk_postre" placeholder="ID Foráneo del Postre">
+
+                            <label for="fk_bebida">FK Bebida</label>
+                            <input type="number" name="fk_bebida" id="fk_bebida" placeholder="ID Foráneo de la Bebida">
+                            
+                            <label for="fk_metodo_pago">FK Método de Pago</label>
+                            <input type="number" name="fk_metodo_pago" id="fk_metodo_pago" placeholder="ID Foráneo de Método de Pago">
+
+                            <input type="submit" name="agregar-paquete" class="btn btn-sm btn-success" value="Ingresar Evento">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
 
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
+                        <h3 class="titulo-table-dash">Lista de Paquetes</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Aperitivo</th>
-                                    <th>Nombre Aperitivo</th>
-
+                                    <th>ID Paquete</th>
+                                    <th>Nombre Paquete</th>
+                                    <th>Anfitrión</th>
+                                    <th>FK Evento</th>
+                                    <th>FK Aperitivo</th>
+                                    <th>FK Entrada</th>
+                                    <th>FK Plato Fuerte</th>
+                                    <th>FK Postre</th>
+                                    <th>FK Bebida</th>
+                                    <th>FK Método Pago</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_aperitivo']?></th>
-                                <th><?= $row['nombre_aperitivo']?></th>
-
-                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update/update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_aperitivo'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_aperitivo'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_aperitivo'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el aperitivo <strong><?= $row['nombre_aperitivo'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_paquete']) ?></td>
+                                            <td><?= htmlspecialchars($row['nombre_paquete']) ?></td>
+                                            <td><?= htmlspecialchars($row['anfitrion']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_evento']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_aperitivo']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_entrada']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_plato_fuerte']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_postre']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_bebida']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_metodo_pago']) ?></td>
+                                            <th><form action=""><a name="modificar-paquete" class="btn btn-sm btn-primary shadow-sm" href="../update/update_paquete.php?id_paquete=<?= $row['id_paquete']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_paquete'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_paquete'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_paquete'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_paquete'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el paquete <strong><?= $row['id_paquete']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="../delete/delete_paquete.php?id_paquete=<?= $row['id_paquete'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete/delete_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -504,6 +627,9 @@ $stmt->execute();
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for the filter btn and insert btn -->
+    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

@@ -1,10 +1,46 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM aperitivos ");
+// Inicializa los filtros
+$id_usuario_filter     = isset($_POST['id_usuario_filter'])     ? $_POST['id_usuario_filter']     : '';
+$correo_usuario_filter = isset($_POST['correo_usuario_filter']) ? $_POST['correo_usuario_filter'] : '';
+$rol_usuario_filter    = isset($_POST['rol_usuario_filter'])    ? $_POST['rol_usuario_filter']    : '';
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM usuario WHERE 1=1";
+
+if (!empty($id_usuario_filter)) {
+    $query .= " AND id_usuario = :id_usuario_filter";
+}
+if (!empty($correo_usuario_filter)) {
+    $query .= " AND correo LIKE :correo_usuario_filter";
+}
+if (!empty($rol_usuario_filter)) {
+    $query .= " AND rol = :rol_usuario_filter";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_usuario_filter)) {
+    $stmt->bindParam(':id_usuario_filter', $id_usuario_filter, PDO::PARAM_INT);
+}
+if (!empty($correo_usuario_filter)) {
+    $correo_usuario_filter = "%$correo_usuario_filter%";
+    $stmt->bindParam(':correo_usuario_filter', $correo_usuario_filter, PDO::PARAM_STR);
+}
+if (!empty($rol_usuario_filter)) {
+    $stmt->bindParam(':rol_usuario_filter', $rol_usuario_filter, PDO::PARAM_STR);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +51,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Aperitivo</title>
+    <title>Tabla Prin. Usuario</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -66,7 +101,7 @@ $stmt->execute();
                 Interface
             </div>
 
-            <!-- Nav Item - Tablas Principales Collapse Menu-->
+             <!-- Nav Item - Tablas Principales Collapse Menu-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
@@ -76,14 +111,14 @@ $stmt->execute();
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades fuertes:</h6>
-                        <a class="collapse-item" href="usuario.php">Usuario</a>
-                        <a class="collapse-item" href="cliente.php">Cliente</a>
-                        <a class="collapse-item" href="evento.php">Evento</a>
-                        <a class="collapse-item" href="paquete.php">Paquete</a>
-                        <a class="collapse-item" href="paquete_servicio.php">paquete_servicio</a>
-                        <a class="collapse-item" href="datos_pago.php">Datos de Pago</a>
-                        <a class="collapse-item" href="pago.php">Pago</a>
-                        <a class="collapse-item" href="cotizacion.php">Cotización</a>
+                        <a class="collapse-item" href="../usuario.php">Usuario</a>
+                        <a class="collapse-item" href="../cliente.php">Cliente</a>
+                        <a class="collapse-item" href="../evento.php">Evento</a>
+                        <a class="collapse-item" href="../paquete.php">Paquete</a>
+                        <a class="collapse-item" href="../paquete_servicio.php">paquete_servicio</a>
+                        <a class="collapse-item" href="../datos_pago.php">Datos de Pago</a>
+                        <a class="collapse-item" href="../pago.php">Pago</a>
+                        <a class="collapse-item" href="../cotizacion.php">Cotización</a>
                     </div>
                 </div>
             </li>
@@ -98,13 +133,13 @@ $stmt->execute();
                 <div id="collapseAux" class="collapse" aria-labelledby="headingAux" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades:</h6>
-                        <a class="collapse-item" href="aperitivo.php">Aperitivo</a>
-                        <a class="collapse-item" href="entrada.php">Entrada</a>
-                        <a class="collapse-item" href="plato_fuerte.php">Plato Fuerte</a>
-                        <a class="collapse-item" href="postre.php">Postre</a>
-                        <a class="collapse-item" href="bebida.php">Bebidas</a>
-                        <a class="collapse-item" href="servicios.php">Servicios</a>
-                        <a class="collapse-item" href="metodo_pago.php">Método de Pago</a>
+                        <a class="collapse-item" href="../aperitivo.php">Aperitivo</a>
+                        <a class="collapse-item" href="../entrada.php">Entrada</a>
+                        <a class="collapse-item" href="../plato_fuerte.php">Plato Fuerte</a>
+                        <a class="collapse-item" href="../postre.php">Postre</a>
+                        <a class="collapse-item" href="../bebida.php">Bebidas</a>
+                        <a class="collapse-item" href="../servicios.php">Servicios</a>
+                        <a class="collapse-item" href="../metodo_pago.php">Método de Pago</a>
                     </div>
                 </div>
             </li>
@@ -374,65 +409,117 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Filter Menu -->
+                    <form action="filtrar_usuario.php" method="POST" autocomplete="off" class="filtro-container">
+                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                        </button>
+
+                        <div id="panelFiltro" class="panel-filtro">
+                        <label>ID Usuario:</label>
+                        <input type="number" name="id_usuario_filter" placeholder="Buscar por ID" />
+
+                        <label>Correo:</label>
+                        <input type="email" name="correo_usuario_filter" placeholder="Buscar por Correo" />
+
+                        <label>Rol:</label>
+                        <select name="rol_usuario_filter">
+                            <option value="">Todos</option>
+                            <option value="usuario">Usuario</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+
+                        <input type="submit" name="filtrar-cliente" value="Filtrar" class="btn-filter" />
+                        </div>
+                    </form>
+                    <!-- End of Filter Menu -->
+                    
                     <!-- Page Heading -->
+
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Aperitivo</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: USUARIO</h1>
                     </div>
 
-                    <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_aperitivo">Nombre: </label>
-                            <input type="text" name="nombre_aperitivo" id="nombre_aperitivo" placeholder="Nombre del aperitivo">
-                            <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
+                    <!-- Botón flotante -->
+                    <button id="boton-flotante" class="boton-flotante">+</button>
+
+                    <!-- Contenedor del formulario oculto -->
+                    <div id="formulario-flotante" class="contenedor-formulario oculto">
+                        <form action="../insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                        
+                            <label for="correo_usuario">Correo: </label>
+                            <input type="email" name="correo" id="correo" placeholder="Correo del Usuario">
+
+                            <label for="contrasenia_usuario">Contraseña:</label>
+                            <input type="password" name="contrasenia1" id="correo" maxlength="8" minlength="8" placeholder="Contraseña del Usuario">
+                            
+                            <label for="contrasenia_usuario">Confirmar Contraseña:</label>
+                            <input type="password" name="contrasenia2" id="correo" maxlength="8" minlength="8" placeholder="Reingrese la Contraseña">
+                            
+                            <label for="rol_usuario">Rol:</label>
+                            <select name="rol" id="rol">
+                                    <option value="" disabled selected>Seleccione el rol</option>
+                                    <option value="usuario">Usuario</option>
+                                    <option value="admin">Administrador</option>
+                            </select><br>
+                            <input type="submit" name="agregar-usuario" class="btn btn-sm btn-success" value="Ingresar Usuario">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
 
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
+                        <h3 class="titulo-table-dash">Lista de Usuarios</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Aperitivo</th>
-                                    <th>Nombre Aperitivo</th>
-
+                                    <th>ID Usuario</th>
+                                    <th>Correo Usuario</th>
+                                    <th>Contraseña</th>
+                                    <th>Rol</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_aperitivo']?></th>
-                                <th><?= $row['nombre_aperitivo']?></th>
-
-                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update/update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_aperitivo'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_aperitivo'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_aperitivo'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el aperitivo <strong><?= $row['nombre_aperitivo'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_usuario']) ?></td>
+                                            <td><?= htmlspecialchars($row['correo']) ?></td>
+                                            <td><?= htmlspecialchars($row['contrasenia']) ?></td>
+                                            <td><?= htmlspecialchars($row['rol']) ?></td>
+                                            <th><form action=""><a name="modificar-usuario" class="btn btn-sm btn-primary shadow-sm" href="../update/update_usuario.php?id_usuario=<?= $row['id_usuario']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_usuario'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_usuario'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_usuario'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_usuario'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará el usuario <strong><?= $row['correo'] ?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="../delete/delete_usuario.php?id_usuario=<?= $row['id_usuario'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete/delete_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -504,6 +591,9 @@ $stmt->execute();
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for the filter btn and insert btn -->
+    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

@@ -1,10 +1,52 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM aperitivos ");
+// Inicializa los filtros
+$id_datos_pago_filter   = ($_POST['id_datos_pago_filter'])   ? $_POST['id_datos_pago_filter']   : '';
+$referencia_pago_filter = ($_POST['referencia_pago_filter']) ? $_POST['referencia_pago_filter'] : '';
+$estado_pago_filter     = ($_POST['estado_pago_filter'])     ? $_POST['estado_pago_filter']     : '';
+$fecha_pago_filter      = ($_POST['fecha_pago_filter'])      ? $_POST['fecha_pago_filter']      : '';
+
+
+// Construye la consulta SQL con filtros
+$query = "SELECT * FROM datos_pago WHERE 1=1";
+
+if (!empty($id_datos_pago_filter)) {
+    $query .= " AND id_datos_pago = :id_datos_pago_filter";
+}
+if (!empty($referencia_pago_filter)){
+    $query .= " AND referencia_pago = :referencia_pago_filter";
+}
+if (!empty($estado_pago_filter)){
+    $query .= " AND estado_pago = :estado_pago_filter";
+}
+if (!empty($fecha_pago_filter)){
+    $query .= " AND fecha_pago = :fecha_pago_filter";
+}
+
+$stmt = $conn->prepare($query);
+
+// Asigna los valores a los parámetros
+if (!empty($id_datos_pago_filter)) {
+    $stmt->bindParam(':id_datos_pago_filter', $id_datos_pago_filter, PDO::PARAM_INT);
+}
+if (!empty($referencia_pago_filter)){
+    $stmt->bindParam(':referencia_pago_filter', $referencia_pago_filter, PDO::PARAM_STR);
+}
+if (!empty($estado_pago_filter)){
+    $stmt->bindParam(':estado_pago_filter', $estado_pago_filter, PDO::PARAM_INT);
+}
+if (!empty($fecha_pago_filter)){
+    $stmt->bindParam(':fecha_pago_filter', $fecha_pago_filter, PDO::PARAM_STR);
+}
+
+// Ejecuta la consulta
 $stmt->execute();
 
+// Muestra los resultados
+$resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +57,10 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Aperitivo</title>
+    <title>Tabla Prin. Datos Pago</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -76,14 +117,14 @@ $stmt->execute();
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades fuertes:</h6>
-                        <a class="collapse-item" href="usuario.php">Usuario</a>
-                        <a class="collapse-item" href="cliente.php">Cliente</a>
-                        <a class="collapse-item" href="evento.php">Evento</a>
-                        <a class="collapse-item" href="paquete.php">Paquete</a>
-                        <a class="collapse-item" href="paquete_servicio.php">paquete_servicio</a>
-                        <a class="collapse-item" href="datos_pago.php">Datos de Pago</a>
-                        <a class="collapse-item" href="pago.php">Pago</a>
-                        <a class="collapse-item" href="cotizacion.php">Cotización</a>
+                        <a class="collapse-item" href="../usuario.php">Usuario</a>
+                        <a class="collapse-item" href="../cliente.php">Cliente</a>
+                        <a class="collapse-item" href="../evento.php">Evento</a>
+                        <a class="collapse-item" href="../paquete.php">Paquete</a>
+                        <a class="collapse-item" href="../paquete_servicio.php">paquete_servicio</a>
+                        <a class="collapse-item" href="../datos_pago.php">Datos de Pago</a>
+                        <a class="collapse-item" href="../pago.php">Pago</a>
+                        <a class="collapse-item" href="../cotizacion.php">Cotización</a>
                     </div>
                 </div>
             </li>
@@ -98,13 +139,13 @@ $stmt->execute();
                 <div id="collapseAux" class="collapse" aria-labelledby="headingAux" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Entidades:</h6>
-                        <a class="collapse-item" href="aperitivo.php">Aperitivo</a>
-                        <a class="collapse-item" href="entrada.php">Entrada</a>
-                        <a class="collapse-item" href="plato_fuerte.php">Plato Fuerte</a>
-                        <a class="collapse-item" href="postre.php">Postre</a>
-                        <a class="collapse-item" href="bebida.php">Bebidas</a>
-                        <a class="collapse-item" href="servicios.php">Servicios</a>
-                        <a class="collapse-item" href="metodo_pago.php">Método de Pago</a>
+                        <a class="collapse-item" href="../aperitivo.php">Aperitivo</a>
+                        <a class="collapse-item" href="../entrada.php">Entrada</a>
+                        <a class="collapse-item" href="../plato_fuerte.php">Plato Fuerte</a>
+                        <a class="collapse-item" href="../postre.php">Postre</a>
+                        <a class="collapse-item" href="../bebida.php">Bebidas</a>
+                        <a class="collapse-item" href="../servicios.php">Servicios</a>
+                        <a class="collapse-item" href="../metodo_pago.php">Método de Pago</a>
                     </div>
                 </div>
             </li>
@@ -374,65 +415,142 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
+                    <!-- Filter Menu -->
+                    <form action="filtrar_datos_pago.php" method="POST" autocomplete="off" class="filtro-container">
+                        
+                        <button id="btnFiltro" class="btn-filtro" title="Filtrar">
+                        <i class="fas fa-filter"></i>
+                        </button>
+
+                        <div id="panelFiltro" class="panel-filtro">
+
+                            <label for="id_datos_pago_filter">ID de Datos Pago:</label>
+                            <input type="number" name="id_datos_pago_filter" id="id_datos_pago_filter" placeholder="Busqueda por ID de Datos:">
+
+                            <label for="referencia_pago_filter">Referencia de Pago:</label>
+                            <input type="text" name="referencia_pago_filter" id="referencia_pago_filter" placeholder="Busqueda por Referencia:">
+
+                            <label for="estado_pago_filter">Estado de Pago:</label>
+                            <select name="estado_pago_filter" id="estado_pago_filter">
+                                <option value="">Selecciona el estado de pago</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Pagado">Pagado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                            
+                            <label for="fecha_pago_filter">Fecha de Pago:</label>
+                            <input type="date" name="fecha_pago_filter" id="fecha_pago_filter" placeholder="Busqueda por fecha:">
+                            
+                            <input type="submit" name="filtrar-datos-pago" value="Filtrar" class="btn-filter" />
+                        </div>
+                    </form>
+                    <!-- End of Filter Menu -->
+
                     <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Aperitivo</h1>
+                        <h1 class="title-maintable-dash">TABLA PRINCIPAL: DATOS PAGO</h1>
                     </div>
 
-                    <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_aperitivo">Nombre: </label>
-                            <input type="text" name="nombre_aperitivo" id="nombre_aperitivo" placeholder="Nombre del aperitivo">
-                            <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
+                    <!-- Botón flotante -->
+                    <button id="boton-flotante" class="boton-flotante">+</button>
+
+                    <div id="formulario-flotante" class="contenedor-formulario oculto">
+                        <form action="../insert.php" autocomplete="off" method="POST" class="formulario-maintable-dash">
+                            
+                            <label for="referencia_pago">Referencia de Pago:</label>
+                            <input type="text" name="referencia_pago" id="referencia_pago" placeholder="Ingrese la Referencia">
+
+                            <label for="fk_metodo_pago">Método de pago:</label>
+                            <select name="fk_metodo_pago" id="fk_metodo_pago">
+                                <option value="">Seleccionar Método de Pago</option>
+                                <option value="1">Transferencia</option>
+                                <option value="2">Efectivo</option>
+                                <option value="3">Débito</option>
+                                <option value="4">Crédito</option>
+                            </select>
+
+                            <label for="estado_pago">Estado de Pago:</label>
+                            <select name="estado_pago" id="estado_pago">
+                                <option value="">Selecciona el estado de pago</option>
+                                <option value="Pendiente">Pendiente</option>
+                                <option value="Pagado">Pagado</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+
+                            <label for="fecha_pago">Fecha de Pago:</label>
+                            <input type="date" name="fecha_pago" id="fecha_pago" placeholder="Ingrese la fecha de pago">
+
+                            <label for="fk_cliente">ID de Cliente:</label>
+                            <input type="number" name="fk_cliente" id="fk_cliente" placeholder="Ingrese el ID del cliente">
+
+                            <label for="fk_usuario">ID de Usuario</label>
+                            <input type="number" name="fk_usuario" id="fk_usuario" placeholder="Ingrese el ID del Usuario">
+
+                            <input type="submit" name="agregar-datos-pago" class="btn btn-sm btn-success" value="Ingresar Paquete">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
 
+
                     <!-- Table Content-Operations -->
+
                     <div>
-                        <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
+                        <h3 class="titulo-table-dash">Lista de Datos de Pago</h3>
                         <table class="table-dashboard">
                             <thead>
                                 <tr>
-                                    <th>ID Aperitivo</th>
-                                    <th>Nombre Aperitivo</th>
-
+                                    <th>ID Datos de Pago</th>
+                                    <th>Referencia de Pago</th>
+                                    <th>FK Método de Pago</th>
+                                    <th>Estado de Pago</th>
+                                    <th>Fecha de Pago</th>
+                                    <th>FK Cliente</th>
+                                    <th>FK Usuario</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_aperitivo']?></th>
-                                <th><?= $row['nombre_aperitivo']?></th>
-
-                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update/update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_aperitivo'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_aperitivo'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_aperitivo'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el aperitivo <strong><?= $row['nombre_aperitivo'] ?></strong>. Esta operación no se puede deshacer.
+                                <?php if (!empty($resultados)): ?>
+                                    <?php foreach ($resultados as $row): ?>
+                                        <tr>
+                                            <td><?= htmlspecialchars($row['id_datos_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['referencia_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_metodo_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['estado_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['fecha_pago']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_cliente']) ?></td>
+                                            <td><?= htmlspecialchars($row['fk_usuario']) ?></td>
+                                            <th><form action=""><a name="modificar-datos-pago" class="btn btn-sm btn-primary shadow-sm" href="../update/update_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago']?>">Modificar</a></form></th>
+                                            <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_datos_pago'] ?>">
+                                                    Eliminar
+                                                </button>
+                                                <div class="modal fade" id="modalEliminar<?= $row['id_datos_pago'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_datos_pago'] ?>" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-danger text-white">
+                                                                <h5 class="modal-title" id="modalLabel<?= $row['id_datos_pago'] ?>">¿Estás seguro?</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                                            </div>
+                                                                <div class="modal-body">
+                                                                    Esta acción eliminará los datos de pago:  <strong><?= $row['id_datos_pago']?></strong>. Esta operación no se puede deshacer.
+                                                                </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <a href="../delete/delete_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago'] ?>" class="btn btn-danger">Eliminar</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete/delete_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
+                                            </th>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="5">No se encontraron resultados.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
@@ -504,6 +622,9 @@ $stmt->execute();
 
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS for the filter btn and insert btn -->
+    <script src="http://localhost/F&M_version1.7.1/dashboard/js/scripts.js"></script>
 
 </body>
 

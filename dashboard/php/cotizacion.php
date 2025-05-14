@@ -375,7 +375,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_cotizacion.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar/filtrar_cotizacion.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -457,7 +457,7 @@ $stmt->execute();
                                 <td><?= $row['fk_evento']?></td>
                                 <td><?= $row['total']?></td>
                                 
-                                <th><form action=""><a name="modificar-cotizacion" class="btn btn-sm btn-primary shadow-sm" href="update_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-cotizacion" class="btn btn-sm btn-primary shadow-sm" href="update/update_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_cotizacion'] ?>">
                                         Eliminar
                                     </button>
@@ -473,7 +473,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_cotizacion.php?id_cotizacion=<?= $row['id_cotizacion'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

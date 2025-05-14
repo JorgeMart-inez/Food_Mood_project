@@ -407,7 +407,7 @@ $stmt->execute();
                                 <th><?= $row['id_entrada']?></th>
                                 <th><?= $row['nombre_entrada']?></th>
 
-                                <th><form action=""><a name="modificar-entrada" class="btn btn-sm btn-primary shadow-sm" href="update_entrada.php?id_entrada=<?= $row['id_entrada']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-entrada" class="btn btn-sm btn-primary shadow-sm" href="update/update_entrada.php?id_entrada=<?= $row['id_entrada']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_entrada'] ?>">
                                         Eliminar
                                     </button>
@@ -423,7 +423,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_entrada.php?id_entrada=<?= $row['id_entrada'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_entrada.php?id_entrada=<?= $row['id_entrada'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

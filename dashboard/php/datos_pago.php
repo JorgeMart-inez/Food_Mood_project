@@ -375,7 +375,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_datos_pago.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar/filtrar_datos_pago.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -480,7 +480,7 @@ $stmt->execute();
                                 <td><?= $row['fk_cliente']?></td>
                                 <td><?= $row['fk_usuario']?></td>
                                 
-                                <th><form action=""><a name="modificar-datos-pago" class="btn btn-sm btn-primary shadow-sm" href="update_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-datos-pago" class="btn btn-sm btn-primary shadow-sm" href="update/update_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_datos_pago'] ?>">
                                         Eliminar
                                     </button>
@@ -496,7 +496,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_datos_pago.php?id_datos_pago=<?= $row['id_datos_pago'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

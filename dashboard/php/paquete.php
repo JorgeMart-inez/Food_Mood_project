@@ -375,7 +375,7 @@ $stmt->execute();
                 <div class="container-fluid">
 
                     <!-- Filter Menu -->
-                    <form action="filtrar_paquete.php" method="POST" autocomplete="off" class="filtro-container">
+                    <form action="filtrar/filtrar_paquete.php" method="POST" autocomplete="off" class="filtro-container">
                         
                         <button id="btnFiltro" class="btn-filtro" title="Filtrar">
                         <i class="fas fa-filter"></i>
@@ -488,7 +488,7 @@ $stmt->execute();
                                 <td><?= $row['fk_bebida']?></td>
                                 <td><?= $row['fk_metodo_pago']?></td>
                                 
-                                <th><form action=""><a name="modificar-paquete" class="btn btn-sm btn-primary shadow-sm" href="update_paquete.php?id_paquete=<?= $row['id_paquete']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-paquete" class="btn btn-sm btn-primary shadow-sm" href="update/update_paquete.php?id_paquete=<?= $row['id_paquete']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_paquete'] ?>">
                                         Eliminar
                                     </button>
@@ -504,7 +504,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_paquete.php?id_paquete=<?= $row['id_paquete'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_paquete.php?id_paquete=<?= $row['id_paquete'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

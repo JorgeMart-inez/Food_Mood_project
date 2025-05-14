@@ -383,7 +383,7 @@ $stmt->execute();
                         <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
                             <label for="tipo_metodo_pago">Nombre: </label>
                             <input type="text" name="tipo_metodo_pago" id="tipo_metodo_pago" placeholder="Nombre del Método de Pago">
-                            <input type="submit" name="agregar-metodo-pago" class="btn btn-sm btn-success" value="Ingresar Méetodo de Pago">
+                            <input type="submit" name="agregar-metodo-pago" class="btn btn-sm btn-success" value="Ingresar Método de Pago">
                         </form>
                     </div>
                     <!-- End of Page Heading -->
@@ -406,7 +406,7 @@ $stmt->execute();
                                 <th><?= $row['id_metodo_pago']?></th>
                                 <th><?= $row['tipo_metodo_pago']?></th>
 
-                                <th><form action=""><a name="modificar-metodo-pago" class="btn btn-sm btn-primary shadow-sm" href="update_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago']?>">Modificar</a></form></th>
+                                <th><form action=""><a name="modificar-metodo-pago" class="btn btn-sm btn-primary shadow-sm" href="update/update_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago']?>">Modificar</a></form></th>
                                 <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_metodo_pago'] ?>">
                                         Eliminar
                                     </button>
@@ -422,7 +422,7 @@ $stmt->execute();
                                                     </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago'] ?>" class="btn btn-danger">Eliminar</a>
+                                                    <a href="delete/delete_metodo_pago.php?id_metodo_pago=<?= $row['id_metodo_pago'] ?>" class="btn btn-danger">Eliminar</a>
                                                 </div>
                                             </div>
                                         </div>

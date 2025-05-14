@@ -1,10 +1,15 @@
 <?php
 include_once 'D:\Xampp\htdocs\F&M_version1.7.1\php\conndb.php';
 
-$stmt = $conn->prepare("SELECT * FROM aperitivos ");
-$stmt->execute();
+    $id_cliente = $_GET['id_cliente'];
+    $stmt = $conn->prepare("SELECT * FROM cliente WHERE id_cliente = :id_cliente");
+    $stmt->bindParam(':id_cliente', $id_cliente);
+    $stmt->execute();
 
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $row = $resultado[0] ?? null;
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,11 +20,7 @@ $stmt->execute();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tabla Aux. Aperitivo</title>
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <title>Tabla Prin. Cliente</title>
 
     <!-- Custom fonts for this template-->
     <link href="http://localhost/F&M_version1.7.1/dashboard/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -374,70 +375,35 @@ $stmt->execute();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
                     <div class="titulo-table-dash-container">
-                        <h1 class="titulo-table-dash">Tabla Auxiliar: Aperitivo</h1>
+                        <h1 class="titulo-maintable-dash">Modificar Cliente</h1>
                     </div>
 
                     <div class="contenedor-formulario-dash">
-                        <form action="insert.php" autocomplete="off" method="POST" class="formulario-dash">
-                            <label for="nombre_aperitivo">Nombre: </label>
-                            <input type="text" name="nombre_aperitivo" id="nombre_aperitivo" placeholder="Nombre del aperitivo">
-                            <input type="submit" name="agregar-aperitivo" class="btn btn-sm btn-success" value="Ingresar Aperitivo">
+                        <form action="..\modificar\modificar_cliente.php" autocomplete="off" method="POST" class="formulario-dash">
+                            <label for="id_cliente">ID Cliente: </label>
+                            <input type="text" name="id_cliente" id="id_cliente" placeholder="ID del Cliente" value="<?= $row['id_cliente']?>" readonly>
+
+                            <label for="nombre_cliente">Nombre: </label>
+                            <input type="text" name="nombre_cliente" id="nombre_cliente" placeholder="Nombre del Cliente" value="<?= $row['nombre']?>">
+
+                            <label for="apellido_cliente">Apellido: </label>
+                            <input type="text" name="apellido_cliente" id="apellido_cliente" placeholder="Apellido del Cliente" value="<?= $row['apellido']?>">
+
+                            <label for="telefono_cliente">Teléfono: </label>
+                            <input type="text" name="telefono_cliente" id="telefono_cliente" placeholder="Teléfono del Cliente" minlength="10" maxlength="10" value="<?= $row['telefono']?>">
+
+                            <label for="estado_cliente">Estado: </label>
+                            <input type="text" name="estado_cliente" id="estado_cliente" placeholder="Estado del Cliente" value="<?= $row['estado']?>">
+
+                            <label for="fk_usuario">FK Usuario: </label>
+                            <input type="number" name="fk_usuario" id="fk_usuario" placeholder="ID del Usuario" value="<?= $row['fk_usuario']?>" readonly>
+                            
+                            <input type="submit" name="modificar-cliente" class="btn btn-sm btn-success" value="Modificar Cliente">
+                            <input type="submit" name="cancelar" class="btn btn-sm btn-danger" value="Cancelar">
                         </form>
                     </div>
-                    <!-- End of Page Heading -->
 
-                    <!-- Table Content-Operations -->
-                    <div>
-                        <h3 class="titulo-table-dash">Lista de Aperitivos</h3>
-                        <table class="table-dashboard">
-                            <thead>
-                                <tr>
-                                    <th>ID Aperitivo</th>
-                                    <th>Nombre Aperitivo</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
-                                ?>
-                                <tr>
-                                <th><?= $row['id_aperitivo']?></th>
-                                <th><?= $row['nombre_aperitivo']?></th>
-
-                                <th><form action=""><a name="modificar-aperitivo" class="btn btn-sm btn-primary shadow-sm" href="update/update_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo']?>">Modificar</a></form></th>
-                                <th><button type="button" class="btn btn-sm btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEliminar<?= $row['id_aperitivo'] ?>">
-                                        Eliminar
-                                    </button>
-                                    <div class="modal fade" id="modalEliminar<?= $row['id_aperitivo'] ?>" tabindex="-1" aria-labelledby="modalLabel<?= $row['id_aperitivo'] ?>" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <div class="modal-header bg-danger text-white">
-                                                    <h5 class="modal-title" id="modalLabel<?= $row['id_aperitivo'] ?>">¿Estás seguro?</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                                </div>
-                                                    <div class="modal-body">
-                                                        Esta acción eliminará el aperitivo <strong><?= $row['nombre_aperitivo'] ?></strong>. Esta operación no se puede deshacer.
-                                                    </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                    <a href="delete/delete_aperitivo.php?id_aperitivo=<?= $row['id_aperitivo'] ?>" class="btn btn-danger">Eliminar</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </th>
-                                </tr>
-                                <?php 
-                                endwhile;
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--End of Table Content-Operations -->
-                
                 </div>
                 <!-- /.container-fluid -->
 
@@ -501,9 +467,6 @@ $stmt->execute();
     <!-- Page level custom scripts -->
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-area-demo.js"></script>
     <script src="http://localhost/F&M_version1.7.1/dashboard/js/demo/chart-pie-demo.js"></script>
-
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
