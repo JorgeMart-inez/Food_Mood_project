@@ -3,7 +3,7 @@ include('conndb.php');
 
 if (isset($_POST['singup']))
 {
-    $correo = $_POST['correo'];
+    $correo       = $_POST['correo'];
     $contrasenia1 = $_POST['contrasenia1'];
     $contrasenia2 = $_POST['contrasenia2'];
 

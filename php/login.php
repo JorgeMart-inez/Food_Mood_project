@@ -32,7 +32,7 @@ if (isset($_POST['login'])) {
             $_SESSION['correo']     = $usuario['correo'];
             echo "<script>
             alert('Bienvenido $correo');
-            window.location.href = '../index.html';
+            window.location.href = '../index.php';
                 </script>";
         exit();
         }

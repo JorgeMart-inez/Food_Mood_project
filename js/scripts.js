@@ -85,16 +85,16 @@ window.addEventListener('DOMContentLoaded', event => {
             const card = button.closest('.card');
 
             // Extrae la información de la tarjeta
-            const imgSrc = card.querySelector('img').src;
-            const title = card.querySelector('h3').textContent;
+            const imgSrc      = card.querySelector('img').src;
+            const title       = card.querySelector('h3').textContent;
             const description = card.querySelector('p').textContent;
-            const id = card.querySelector('a').dataset.id;
+            const id          = card.querySelector('a').dataset.id;
 
             // Actualiza el contenido del modal
-            modalImg.src = imgSrc;
-            modalTitle.textContent = title;
+            modalImg.src               = imgSrc;
+            modalTitle.textContent     = title;
             modalParagraph.textContent = description;
-            modalA.href = 'html/formu'+id+'.html'; 
+            modalA.href = 'php/verificar_cotizacion.php?paquete=' + id; 
 
             // Muestra el modal
             modal.classList.add('modal--show');
@@ -109,18 +109,6 @@ window.addEventListener('DOMContentLoaded', event => {
 
     //FIN DEL EVENTO DE PAQUETES
 
-    //INICIO DEL EVENTO DE MENSAJE FLOTANTE
-
-    // Obtener el mensaje y el botón Ok
-    const mensaje    = document.getElementById('datos-persoles');
-    const aceptarBtn = document.getElementById('aceptar');
-
-    // Función para ocultar el mensaje cuando se haga clic en "Ok"
-    aceptarBtn.addEventListener('click', () => {
-        mensaje.classList.add('hidden');
-    });
-    //FIN DE EVENTO DE MENSAJE
-
     //INICIO DEL EVENTO DE VALIDACION DE CONTRASEÑAS EN SINGUP
     document.querySelector("#singup-form").addEventListener("submit", function(event){
         let contrasenia_uno = document.getElementById("contrasenia1").value;
@@ -131,6 +119,7 @@ window.addEventListener('DOMContentLoaded', event => {
             alert("Las contraseñas no coinciden");
         }
     })
+    //FIN DEL EVENTO DE VALIDACION DE CONTRASEÑAS EN SINGUP
 
 });
 

@@ -150,7 +150,7 @@ if (isset($_POST['cotizar-p1'])) {
 
             if ($ok1 && $ok2 && $ok3 && $ok4 && $ok5 && $ok6) {
                 $conn->commit();
-                echo "<h2>Paquete ingresado correctamente</h2>";
+                //echo "<h2>Paquete ingresado correctamente</h2>";
                 echo $libreria->formato_cotizar($paquete, $anfitrion, $evento, $lugar, $fecha, $hora, $duracion,
                             $invitados, $servicios_str, $nombre_aperitivo, $nombre_entrada, $nombre_plato_fuerte, 
                             $nombre_bebida, $nombre_metodo, $servicios);
@@ -307,7 +307,7 @@ else if (isset($_POST['cotizar-p2']))
 
             if ($ok1 && $ok2 && $ok3 && $ok4 && $ok5 && $ok6) {
                 $conn->commit();
-                echo "<h2>Paquete ingresado correctamente</h2>";
+                //echo "<h2>Paquete ingresado correctamente</h2>";
                 echo $libreria->formato_cotizar($paquete, $anfitrion, $evento, $lugar, $fecha, $hora, $duracion,
                             $invitados, $servicios_str, $nombre_aperitivo, $nombre_entrada, $nombre_plato_fuerte, 
                             $nombre_bebida, $nombre_metodo, $servicios);
@@ -470,7 +470,7 @@ else if (isset($_POST['cotizar-p3']))
 
             if ($ok1 && $ok2 && $ok3 && $ok4 && $ok5 && $ok6) {
                 $conn->commit();
-                echo "<h2>Paquete ingresado correctamente</h2>";
+                //echo "<h2>Paquete ingresado correctamente</h2>";
                 echo $libreria->formato_cotizar2($paquete, $anfitrion, $evento, $lugar, $fecha, $hora, $duracion,
                             $invitados, $servicios_str, $nombre_aperitivo, $nombre_entrada, $nombre_plato_fuerte, 
                             $nombre_postre, $nombre_bebida, $nombre_metodo, $servicios);
@@ -491,7 +491,7 @@ else if (isset($_POST['cotizar-p4']))
 {
     try {
         $conn->beginTransaction();
- 
+
         //Variables recibidas del formulario
         $anfitrion = trim($_POST['anfitrion']); 
         $fecha     = trim($_POST['fecha']); 
@@ -634,7 +634,7 @@ else if (isset($_POST['cotizar-p4']))
 
             if ($ok1 && $ok2 && $ok3 && $ok4 && $ok5 && $ok6) {
                 $conn->commit();
-                echo "<h2>Paquete ingresado correctamente</h2>";
+                //echo "<h2>Paquete ingresado correctamente</h2>";
                 echo $libreria->formato_cotizar2($paquete, $anfitrion, $evento, $lugar, $fecha, $hora, $duracion,
                             $invitados, $servicios_str, $nombre_aperitivo, $nombre_entrada, $nombre_plato_fuerte, 
                             $nombre_postre, $nombre_bebida, $nombre_metodo, $servicios);
@@ -656,7 +656,7 @@ else if(isset($_POST['cliente']))
 
     if(!empty($_POST['nombre']) && !empty($_POST['apellido']) && !empty($_POST['telefono']) 
                                 && !empty($_POST['estado']))
-    {
+    {   
         $nombre     = trim($_POST['nombre']);
         $apellido   = trim($_POST['apellido']);
         $telefono   = trim($_POST['telefono']);
@@ -676,7 +676,7 @@ else if(isset($_POST['cliente']))
         {
             echo "<script>
             alert('Cliente ingresado correctamente');
-            window.location.href = '../index.html'; // Redirige al usuario a la página principal
+            window.location.href = '../index.php'; // Redirige al usuario a la página principal
             </script>";
             exit(); 
         }
@@ -691,7 +691,7 @@ else
     echo "<h2 font-family='Times New Roman, Sain, Serif'>¡Ups!, ha ocurrido un error inesperado</h2>";
     echo "<script>
             alert('Redirigiendo a la página principal...');
-            window.location.href = '../index.html'; // Redirige al usuario a la página principal
+            window.location.href = '../index.php'; // Redirige al usuario a la página principal
             </script>";
             exit(); 
 }

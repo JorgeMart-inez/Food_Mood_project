@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
     <link rel="stylesheet" href="../css/estilos.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- JS -->
+    <script src="../js/password.js" defer></script>
     <title>Login</title>
 </head>
 <body>
@@ -12,7 +17,7 @@
         <!-- Navigation-->
         <nav class="login-nav">
             <ul class="login-nav-links">
-                <li><a href="../index.html">FOOD & MOOD</a></li>
+                <li><a href="../index.php">FOOD & MOOD</a></li>
             </ul>
         </nav>
     </header>
@@ -26,7 +31,8 @@
                 <label for="correo">Correo:</label><br>
                 <input type="email" name="correo" id="correo" required><br>
                 <label for="contraseña">Contraseña:</label><br>
-                <input type="password" name="contrasenia" id="contrasenia" minlength="8" maxlength="8" required><br>
+                <input type="password" name="contrasenia" id="contrasenia" minlength="8" maxlength="8" required>
+                <i class="fa fa-eye" style="position: absolute; margin-left: -25px; top: 56%; transform: translateY(50%); cursor: pointer;" id="togglePassword"></i><br>
                 <input type="submit" class="submit-login" name="login" value="Ingresar">
                 <p align="center"><a href="#">¿No recuerdas tu contraseña?</a></p>
                 <p align="center"><a href="singup.html">¿No tienes cuenta? Crea una.</a></p>
