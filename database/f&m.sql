@@ -96,17 +96,17 @@ FOREIGN KEY (fk_cliente)  REFERENCES cliente(id_cliente)
 );
 
 CREATE TABLE cotizacion(
-id_cotizacion       SERIAL  PRIMARY KEY,
-fk_paquete          INTEGER NOT NULL,
-fk_cliente          INTEGER NOT NULL,
-fk_evento           INTEGER NOT NULL,
-total         NUMERIC(7,2)  NOT NULL,
-FOREIGN KEY (fk_paquete)          REFERENCES paquete(id_paquete),
-FOREIGN KEY (fk_cliente)          REFERENCES cliente(id_cliente),
-FOREIGN KEY (fk_evento)           REFERENCES evento(id_evento)
+id_cotizacion  SERIAL  PRIMARY KEY,
+fk_paquete     INTEGER NOT NULL,
+fk_cliente     INTEGER NOT NULL,
+fk_evento      INTEGER NOT NULL,
+total          NUMERIC(7,2)  NOT NULL,
+FOREIGN KEY (fk_paquete) REFERENCES paquete(id_paquete),
+FOREIGN KEY (fk_cliente) REFERENCES cliente(id_cliente),
+FOREIGN KEY (fk_evento)  REFERENCES evento(id_evento)
 );
 
-/* referencia se obtiene de libreria*/
+
 CREATE TABLE datos_pago(
 id_datos_pago   SERIAL PRIMARY KEY, 
 referencia_pago VARCHAR(255)  NOT NULL, 

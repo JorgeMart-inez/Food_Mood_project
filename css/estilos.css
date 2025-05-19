@@ -488,3 +488,18 @@ tr:hover {
   background-color: #ddd;
 }
 
+/* estilos para las alertas en el sistema */
+.alerta {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: orange;
+    color: #222;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+  }

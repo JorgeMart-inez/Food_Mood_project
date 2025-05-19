@@ -60,6 +60,8 @@ cliente esta logeado? ->no:: entonces logeeate
 |
 si::
 |
+puede cotizar
+|
 el cliente elige un paquete
 |
 el cliente rellena el formulario de paquete
