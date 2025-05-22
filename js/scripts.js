@@ -120,7 +120,7 @@ window.addEventListener('DOMContentLoaded', event => {
         }
     })
     //FIN DEL EVENTO DE VALIDACION DE CONTRASEÑAS EN SINGUP
-
+    
 });
 
     

@@ -30,3 +30,6 @@ window.addEventListener('DOMContentLoaded', () => {
     togglePasswordField("contrasenia1", "togglePass1");
     togglePasswordField("contrasenia2", "togglePass2");
 });
+
+
+

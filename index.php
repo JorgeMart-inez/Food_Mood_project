@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="../F&M_version1.7.1/css/styles.css">
 </head>
 
-<body id="page-top">
+<body id="page-top">    
 
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
@@ -107,8 +107,8 @@
             </div>
         </div>
     </section>
-   
 
+    <!-- Services - Slider -->
     <section class="page-section" id="services">
         <div class="container px-4 px-lg-5">
             <h2 class="text-center mt-0">Selecciona un Paquete</h2>

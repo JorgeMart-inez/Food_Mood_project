@@ -63,8 +63,13 @@ if (isset($_POST['cotizar-p1'])) {
         $ok2 = $stmt2->execute();
         $id_paquete = $conn->lastInsertId();
 
-        $id_cliente = $_SESSION['id_usuario']; // Obtenemos el id_usuario de la sesión
-        $id_usuario = $id_cliente;
+        $id_usuario = $_SESSION['id_usuario']; // Obtenemos el id_usuario de la sesión
+        
+        //Seleccionamos el id_cliente de la tabla cliente
+        $stmt_cliente = $conn->prepare("SELECT id_cliente FROM cliente WHERE fk_usuario = :id_usuario");
+        $stmt_cliente->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt_cliente->execute();
+        $id_cliente = $stmt_cliente->fetchColumn();
 
         if(!empty($_POST['servicios']))
         {
@@ -220,8 +225,13 @@ else if (isset($_POST['cotizar-p2']))
         $ok2 = $stmt2->execute();
         $id_paquete = $conn->lastInsertId();
 
-        $id_cliente = $_SESSION['id_usuario']; 
-        $id_usuario = $id_cliente;
+        $id_usuario = $_SESSION['id_usuario']; // Obtenemos el id_usuario de la sesión
+        
+        //Seleccionamos el id_cliente de la tabla cliente
+        $stmt_cliente = $conn->prepare("SELECT id_cliente FROM cliente WHERE fk_usuario = :id_usuario");
+        $stmt_cliente->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt_cliente->execute();
+        $id_cliente = $stmt_cliente->fetchColumn();
 
         if(!empty($_POST['servicios']))
         {
@@ -378,8 +388,13 @@ else if (isset($_POST['cotizar-p3']))
         $ok2 = $stmt2->execute();
         $id_paquete = $conn->lastInsertId();
 
-        $id_cliente = $_SESSION['id_usuario']; 
-        $id_usuario = $id_cliente;
+        $id_usuario = $_SESSION['id_usuario']; // Obtenemos el id_usuario de la sesión
+        
+        //Seleccionamos el id_cliente de la tabla cliente
+        $stmt_cliente = $conn->prepare("SELECT id_cliente FROM cliente WHERE fk_usuario = :id_usuario");
+        $stmt_cliente->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt_cliente->execute();
+        $id_cliente = $stmt_cliente->fetchColumn();
 
         if(!empty($_POST['servicios']))
         {
@@ -542,8 +557,13 @@ else if (isset($_POST['cotizar-p4']))
         $ok2 = $stmt2->execute();
         $id_paquete = $conn->lastInsertId();
 
-        $id_cliente = $_SESSION['id_usuario']; 
-        $id_usuario = $id_cliente;
+       $id_usuario = $_SESSION['id_usuario']; // Obtenemos el id_usuario de la sesión
+        
+        //Seleccionamos el id_cliente de la tabla cliente
+        $stmt_cliente = $conn->prepare("SELECT id_cliente FROM cliente WHERE fk_usuario = :id_usuario");
+        $stmt_cliente->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt_cliente->execute();
+        $id_cliente = $stmt_cliente->fetchColumn();
 
         if(!empty($_POST['servicios']))
         {
@@ -676,7 +696,7 @@ else if(isset($_POST['cliente']))
         {
             echo "<script>
             alert('Cliente ingresado correctamente');
-            window.location.href = '../index.php'; // Redirige al usuario a la página principal
+            window.location.href = '../html/login.html'; // Redirige al usuario a la página principal
             </script>";
             exit(); 
         }
